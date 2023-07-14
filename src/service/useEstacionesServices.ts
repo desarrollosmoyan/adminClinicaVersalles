@@ -50,7 +50,7 @@ export const useEstacionesServices = () => {
 
         return { res: true, response: !!res.data?.createEstacione }
       } catch (error) {
-        return { res: true, response: 'Hubo un error' }
+        return { res: false, response: 'Hubo un error' }
       }
     },
     UpdateEstacion: async ({ updateEstacioneId, data }: { updateEstacioneId: string; data: EstacioneInput }) => {
@@ -61,7 +61,7 @@ export const useEstacionesServices = () => {
 
         return { res: true, response: !!res.data?.updateEstacione }
       } catch (error) {
-        return { res: true, response: 'Hubo un error' }
+        return { res: false, response: 'Hubo un error' }
       }
     },
     DeleteEstacion: async ({ deleteEstacioneId }: { deleteEstacioneId: string }) => {
@@ -72,7 +72,7 @@ export const useEstacionesServices = () => {
 
         return { res: true, response: !!res.data?.deleteEstacione }
       } catch (error) {
-        return { res: true, response: 'Hubo un error' }
+        return { res: false, response: 'Hubo un error' }
       }
     }
   }

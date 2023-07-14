@@ -14,6 +14,11 @@ const navigation = (): VerticalNavItemsType => {
       icon: 'tabler:smart-home'
     },
     {
+      title: 'Pedidos',
+      path: '/pedidos',
+      icon: 'tabler:smart-home'
+    },
+    {
       title: 'Second Page',
       path: '/second-page',
       icon: 'tabler:mail'

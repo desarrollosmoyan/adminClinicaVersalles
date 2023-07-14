@@ -1,0 +1,7 @@
+mutation CreatePedido($data: PedidoInput!) {
+  createPedido(data: $data) {
+    data {
+      id
+    }
+  }
+}

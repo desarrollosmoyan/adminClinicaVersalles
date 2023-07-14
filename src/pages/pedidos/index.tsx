@@ -2,7 +2,6 @@
 import { useState, MouseEvent, useCallback, Dispatch, SetStateAction } from 'react'
 
 // ** Next Imports
-import Link from 'next/link'
 
 // ** MUI Imports
 import Box from '@mui/material/Box'
@@ -19,26 +18,29 @@ import { DataGrid, GridColDef } from '@mui/x-data-grid'
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
 
-import TableHeader from 'src/views/apps/user/list/TableHeader'
-
 // ** Services
-import { useEstacionesServices } from 'src/service/useEstacionesServices'
-import AddUserDrawer from 'src/views/apps/user/list/AddUserDrawer'
-
 import { format } from 'date-fns'
-
-import { EstacioneEntity } from 'src/generated/graphql'
-
+import { PedidoEntity } from 'src/generated/graphql'
 import { toast } from 'react-hot-toast'
+
+import TableHeader from 'src/components/shared/TableHeader'
+import AddUserDrawer from 'src/views/apps/pedidos/AddUserDrawer'
+import { usePedidosServices } from 'src/service/usePedidosServices'
+import Link from 'next/link'
 
 interface CellType {
   row: any
 }
 
-export interface UpdateEstacion {
-  codigoNFC?: string | undefined | null
+export interface UpdatePedido {
+  cliente?: string | undefined | null
   createdAt?: string | undefined | null
-  nombre?: string | undefined | null
+  cuantoTardoInicioFin?: string | undefined | null
+  descripcion?: string | undefined | null
+  estacionFin?: string | undefined | null
+  estacionInicio?: string | undefined | null
+
+  nombrePedido?: string | undefined | null
   updatedAt?: string | undefined | null
   id?: string | undefined | null
 }
@@ -46,18 +48,18 @@ export interface UpdateEstacion {
 const RowOptions = ({
   data,
   setIsModal,
-  setDataEstacion,
+  setDataPedido,
   refetch,
   setNameModal
 }: {
-  data: EstacioneEntity
+  data: PedidoEntity
   setIsModal: Dispatch<SetStateAction<boolean>>
   setNameModal: Dispatch<SetStateAction<string>>
-  setDataEstacion: Dispatch<SetStateAction<UpdateEstacion | undefined>>
+  setDataPedido: Dispatch<SetStateAction<UpdatePedido | undefined>>
   refetch: () => void
 }) => {
   // ** Llamada a graphql
-  const { DeleteEstacion } = useEstacionesServices()
+  const { DeletePedido } = usePedidosServices()
 
   // ** State
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
@@ -70,14 +72,14 @@ const RowOptions = ({
   const handleRowOptionsClose = () => {
     setNameModal('editar')
     setIsModal(true)
-    setDataEstacion({ ...data.attributes!, id: data.id! })
+    setDataPedido({ ...data.attributes!, id: data.id! })
     setAnchorEl(null)
   }
 
   const handleDelete = async () => {
-    const res = await DeleteEstacion({ deleteEstacioneId: data.id! })
+    const res = await DeletePedido({ deletePedidoId: data.id! })
     if (res.res) {
-      toast.success('Estación eliminada', {
+      toast.success('Pedido eliminado', {
         duration: 2000
       })
       refetch()
@@ -108,6 +110,16 @@ const RowOptions = ({
         }}
         PaperProps={{ style: { minWidth: '8rem' } }}
       >
+        <MenuItem
+          component={Link}
+          sx={{ '& svg': { mr: 2 } }}
+          href={`pedidos/detalle-pedido/${data.id}`}
+
+          // onClick={handleRowOptionsClose}
+        >
+          <Icon icon='tabler:eye' fontSize={20} />
+          Ver
+        </MenuItem>
         <MenuItem onClick={handleRowOptionsClose} sx={{ '& svg': { mr: 2 } }}>
           <Icon icon='tabler:edit' fontSize={20} />
           Editar
@@ -121,44 +133,34 @@ const RowOptions = ({
   )
 }
 
-const EstacionesPage = () => {
+const PedidosPage = () => {
   // ** State
   const [value, setValue] = useState<string>('')
   const [isModal, setIsModal] = useState(false)
-  const [dataEstacion, setDataEstacion] = useState<UpdateEstacion | undefined>()
-  const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 10 })
   const [nameModal, setNameModal] = useState('crear')
+  const [dataPedido, setDataPedido] = useState<UpdatePedido | undefined>()
+  const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 10 })
 
   // ** Llama de graphql
-  const { Estaciones } = useEstacionesServices()
-  const { dataEstaciones, refetch } = Estaciones()
+  const { Pedidos } = usePedidosServices()
+  const { dataPedidos, refetch } = Pedidos({
+    pagination: { pageSize: paginationModel.pageSize, page: paginationModel.page }
+  })
 
   // ** Columns
   const columns: GridColDef[] = [
     {
       flex: 0.25,
       minWidth: 280,
-      field: 'nombre',
-      headerName: 'Nombre',
+      field: 'cliente',
+      headerName: 'Cliente',
       renderCell: ({ row }: CellType) => {
-        const { nombre } = row.attributes
-
         return (
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             {/* {renderClient(row)} */}
             <Box sx={{ display: 'flex', alignItems: 'flex-start', flexDirection: 'column' }}>
-              <Typography
-                noWrap
-                component={Link}
-                href='/apps/user/view/account'
-                sx={{
-                  fontWeight: 500,
-                  textDecoration: 'none',
-                  color: 'text.secondary',
-                  '&:hover': { color: 'primary.main' }
-                }}
-              >
-                {nombre}
+              <Typography noWrap sx={{ color: 'text.secondary', textTransform: 'capitalize' }}>
+                {row.attributes.cliente}
               </Typography>
             </Box>
           </Box>
@@ -167,19 +169,65 @@ const EstacionesPage = () => {
     },
     {
       flex: 0.15,
-      field: 'codigoNFC',
+      field: 'descripcion',
       minWidth: 170,
-      headerName: 'Codigo NFC',
+      headerName: 'Descripcion',
       renderCell: ({ row }: CellType) => {
         return (
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Typography noWrap sx={{ color: 'text.secondary', textTransform: 'capitalize' }}>
-              {row.attributes.codigoNFC}
+              {row.attributes.descripcion}
             </Typography>
           </Box>
         )
       }
     },
+    {
+      flex: 0.15,
+      field: 'estacionInicio',
+      minWidth: 170,
+      headerName: 'Estacion Inicio',
+      renderCell: ({ row }: CellType) => {
+        return (
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Typography noWrap sx={{ color: 'text.secondary', textTransform: 'capitalize' }}>
+              {row.attributes.estacionInicio}
+            </Typography>
+          </Box>
+        )
+      }
+    },
+    {
+      flex: 0.15,
+      field: 'estacionFin',
+      minWidth: 170,
+      headerName: 'Estacion Fin',
+      renderCell: ({ row }: CellType) => {
+        return (
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Typography noWrap sx={{ color: 'text.secondary', textTransform: 'capitalize' }}>
+              {row.attributes.estacionFin}
+            </Typography>
+          </Box>
+        )
+      }
+    },
+    {
+      flex: 0.15,
+      field: 'nombrePedido',
+      minWidth: 170,
+      headerName: 'Nombre Pedido',
+      renderCell: ({ row }: CellType) => {
+        return (
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Typography noWrap sx={{ color: 'text.secondary', textTransform: 'capitalize' }}>
+              {row.attributes.nombrePedido}
+            </Typography>
+          </Box>
+        )
+      }
+    },
+
     {
       flex: 0.15,
       minWidth: 120,
@@ -204,7 +252,7 @@ const EstacionesPage = () => {
         <RowOptions
           data={row}
           setIsModal={setIsModal}
-          setDataEstacion={setDataEstacion}
+          setDataPedido={setDataPedido}
           refetch={refetch}
           setNameModal={setNameModal}
         />
@@ -218,6 +266,7 @@ const EstacionesPage = () => {
 
   const toggleAddUserDrawer = () => {
     setIsModal(!isModal)
+    setNameModal('crear')
   }
 
   return (
@@ -229,13 +278,13 @@ const EstacionesPage = () => {
             value={value}
             handleFilter={handleFilter}
             toggle={toggleAddUserDrawer}
-            name='Agregar Estación'
-            nameSearch='Buscar estaciones'
+            name='Agregar Pedido'
+            nameSearch='Buscar pedidos'
           />
           <DataGrid
             autoHeight
             rowHeight={62}
-            rows={dataEstaciones}
+            rows={dataPedidos}
             columns={columns}
             disableRowSelectionOnClick
             pageSizeOptions={[10, 25, 50]}
@@ -249,7 +298,7 @@ const EstacionesPage = () => {
       <AddUserDrawer
         open={isModal}
         toggle={toggleAddUserDrawer}
-        dataEstacion={dataEstacion}
+        data={dataPedido}
         refetch={refetch}
         nameModal={nameModal}
       />
@@ -257,4 +306,4 @@ const EstacionesPage = () => {
   )
 }
 
-export default EstacionesPage
+export default PedidosPage

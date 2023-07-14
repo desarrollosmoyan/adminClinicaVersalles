@@ -1,0 +1,22 @@
+query Pedido($pedidoId: ID) {
+  pedido(id: $pedidoId) {
+    data {
+      id
+      attributes {
+        nombrePedido
+        descripcion
+        cliente
+        fecha
+        hora
+        estacionInicio
+        estacionFin
+        fehcaInicio
+        fechaFin
+        cuantoTardoInicioFin
+
+        createdAt
+        updatedAt
+      }
+    }
+  }
+}

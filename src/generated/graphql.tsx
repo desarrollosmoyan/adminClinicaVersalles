@@ -1235,12 +1235,48 @@ export type UpdateEstacioneMutationVariables = Exact<{
 
 export type UpdateEstacioneMutation = { __typename?: 'Mutation', updateEstacione?: { __typename?: 'EstacioneEntityResponse', data?: { __typename?: 'EstacioneEntity', id?: string | null } | null } | null };
 
+export type CreatePedidoMutationVariables = Exact<{
+  data: PedidoInput;
+}>;
+
+
+export type CreatePedidoMutation = { __typename?: 'Mutation', createPedido?: { __typename?: 'PedidoEntityResponse', data?: { __typename?: 'PedidoEntity', id?: string | null } | null } | null };
+
+export type DeletePedidoMutationVariables = Exact<{
+  deletePedidoId: Scalars['ID']['input'];
+}>;
+
+
+export type DeletePedidoMutation = { __typename?: 'Mutation', deletePedido?: { __typename?: 'PedidoEntityResponse', data?: { __typename?: 'PedidoEntity', id?: string | null } | null } | null };
+
+export type UpdatePedidoMutationVariables = Exact<{
+  updatePedidoId: Scalars['ID']['input'];
+  data: PedidoInput;
+}>;
+
+
+export type UpdatePedidoMutation = { __typename?: 'Mutation', updatePedido?: { __typename?: 'PedidoEntityResponse', data?: { __typename?: 'PedidoEntity', id?: string | null } | null } | null };
+
 export type EstacionesQueryVariables = Exact<{
   pagination?: InputMaybe<PaginationArg>;
 }>;
 
 
 export type EstacionesQuery = { __typename?: 'Query', estaciones?: { __typename?: 'EstacioneEntityResponseCollection', data: Array<{ __typename?: 'EstacioneEntity', id?: string | null, attributes?: { __typename?: 'Estacione', nombre?: string | null, codigoNFC?: string | null, createdAt?: any | null, updatedAt?: any | null } | null }>, meta: { __typename?: 'ResponseCollectionMeta', pagination: { __typename?: 'Pagination', total: number } } } | null };
+
+export type PedidoQueryVariables = Exact<{
+  pedidoId?: InputMaybe<Scalars['ID']['input']>;
+}>;
+
+
+export type PedidoQuery = { __typename?: 'Query', pedido?: { __typename?: 'PedidoEntityResponse', data?: { __typename?: 'PedidoEntity', id?: string | null, attributes?: { __typename?: 'Pedido', nombrePedido?: string | null, descripcion?: string | null, cliente?: string | null, fecha?: any | null, hora?: any | null, estacionInicio?: string | null, estacionFin?: string | null, fehcaInicio?: any | null, fechaFin?: any | null, cuantoTardoInicioFin?: string | null, createdAt?: any | null, updatedAt?: any | null } | null } | null } | null };
+
+export type PedidosQueryVariables = Exact<{
+  pagination?: InputMaybe<PaginationArg>;
+}>;
+
+
+export type PedidosQuery = { __typename?: 'Query', pedidos?: { __typename?: 'PedidoEntityResponseCollection', data: Array<{ __typename?: 'PedidoEntity', id?: string | null, attributes?: { __typename?: 'Pedido', nombrePedido?: string | null, descripcion?: string | null, cliente?: string | null, fecha?: any | null, hora?: any | null, estacionInicio?: string | null, estacionFin?: string | null, fehcaInicio?: any | null, fechaFin?: any | null, cuantoTardoInicioFin?: string | null, createdAt?: any | null, updatedAt?: any | null, user?: { __typename?: 'UsersPermissionsUserEntityResponse', data?: { __typename?: 'UsersPermissionsUserEntity', id?: string | null, attributes?: { __typename?: 'UsersPermissionsUser', username: string, email: string, provider?: string | null, confirmed?: boolean | null, blocked?: boolean | null, cargo?: string | null, nombreCompleto?: string | null, Area?: string | null, createdAt?: any | null, updatedAt?: any | null } | null } | null } | null } | null }>, meta: { __typename?: 'ResponseCollectionMeta', pagination: { __typename?: 'Pagination', total: number } } } | null };
 
 
 export const LoginDocument = gql`
@@ -1389,6 +1425,112 @@ export function useUpdateEstacioneMutation(baseOptions?: Apollo.MutationHookOpti
 export type UpdateEstacioneMutationHookResult = ReturnType<typeof useUpdateEstacioneMutation>;
 export type UpdateEstacioneMutationResult = Apollo.MutationResult<UpdateEstacioneMutation>;
 export type UpdateEstacioneMutationOptions = Apollo.BaseMutationOptions<UpdateEstacioneMutation, UpdateEstacioneMutationVariables>;
+export const CreatePedidoDocument = gql`
+    mutation CreatePedido($data: PedidoInput!) {
+  createPedido(data: $data) {
+    data {
+      id
+    }
+  }
+}
+    `;
+export type CreatePedidoMutationFn = Apollo.MutationFunction<CreatePedidoMutation, CreatePedidoMutationVariables>;
+
+/**
+ * __useCreatePedidoMutation__
+ *
+ * To run a mutation, you first call `useCreatePedidoMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreatePedidoMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createPedidoMutation, { data, loading, error }] = useCreatePedidoMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useCreatePedidoMutation(baseOptions?: Apollo.MutationHookOptions<CreatePedidoMutation, CreatePedidoMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreatePedidoMutation, CreatePedidoMutationVariables>(CreatePedidoDocument, options);
+      }
+export type CreatePedidoMutationHookResult = ReturnType<typeof useCreatePedidoMutation>;
+export type CreatePedidoMutationResult = Apollo.MutationResult<CreatePedidoMutation>;
+export type CreatePedidoMutationOptions = Apollo.BaseMutationOptions<CreatePedidoMutation, CreatePedidoMutationVariables>;
+export const DeletePedidoDocument = gql`
+    mutation DeletePedido($deletePedidoId: ID!) {
+  deletePedido(id: $deletePedidoId) {
+    data {
+      id
+    }
+  }
+}
+    `;
+export type DeletePedidoMutationFn = Apollo.MutationFunction<DeletePedidoMutation, DeletePedidoMutationVariables>;
+
+/**
+ * __useDeletePedidoMutation__
+ *
+ * To run a mutation, you first call `useDeletePedidoMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeletePedidoMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deletePedidoMutation, { data, loading, error }] = useDeletePedidoMutation({
+ *   variables: {
+ *      deletePedidoId: // value for 'deletePedidoId'
+ *   },
+ * });
+ */
+export function useDeletePedidoMutation(baseOptions?: Apollo.MutationHookOptions<DeletePedidoMutation, DeletePedidoMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeletePedidoMutation, DeletePedidoMutationVariables>(DeletePedidoDocument, options);
+      }
+export type DeletePedidoMutationHookResult = ReturnType<typeof useDeletePedidoMutation>;
+export type DeletePedidoMutationResult = Apollo.MutationResult<DeletePedidoMutation>;
+export type DeletePedidoMutationOptions = Apollo.BaseMutationOptions<DeletePedidoMutation, DeletePedidoMutationVariables>;
+export const UpdatePedidoDocument = gql`
+    mutation UpdatePedido($updatePedidoId: ID!, $data: PedidoInput!) {
+  updatePedido(id: $updatePedidoId, data: $data) {
+    data {
+      id
+    }
+  }
+}
+    `;
+export type UpdatePedidoMutationFn = Apollo.MutationFunction<UpdatePedidoMutation, UpdatePedidoMutationVariables>;
+
+/**
+ * __useUpdatePedidoMutation__
+ *
+ * To run a mutation, you first call `useUpdatePedidoMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdatePedidoMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updatePedidoMutation, { data, loading, error }] = useUpdatePedidoMutation({
+ *   variables: {
+ *      updatePedidoId: // value for 'updatePedidoId'
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useUpdatePedidoMutation(baseOptions?: Apollo.MutationHookOptions<UpdatePedidoMutation, UpdatePedidoMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdatePedidoMutation, UpdatePedidoMutationVariables>(UpdatePedidoDocument, options);
+      }
+export type UpdatePedidoMutationHookResult = ReturnType<typeof useUpdatePedidoMutation>;
+export type UpdatePedidoMutationResult = Apollo.MutationResult<UpdatePedidoMutation>;
+export type UpdatePedidoMutationOptions = Apollo.BaseMutationOptions<UpdatePedidoMutation, UpdatePedidoMutationVariables>;
 export const EstacionesDocument = gql`
     query Estaciones($pagination: PaginationArg) {
   estaciones(pagination: $pagination) {
@@ -1437,3 +1579,127 @@ export function useEstacionesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions
 export type EstacionesQueryHookResult = ReturnType<typeof useEstacionesQuery>;
 export type EstacionesLazyQueryHookResult = ReturnType<typeof useEstacionesLazyQuery>;
 export type EstacionesQueryResult = Apollo.QueryResult<EstacionesQuery, EstacionesQueryVariables>;
+export const PedidoDocument = gql`
+    query Pedido($pedidoId: ID) {
+  pedido(id: $pedidoId) {
+    data {
+      id
+      attributes {
+        nombrePedido
+        descripcion
+        cliente
+        fecha
+        hora
+        estacionInicio
+        estacionFin
+        fehcaInicio
+        fechaFin
+        cuantoTardoInicioFin
+        createdAt
+        updatedAt
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __usePedidoQuery__
+ *
+ * To run a query within a React component, call `usePedidoQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePedidoQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePedidoQuery({
+ *   variables: {
+ *      pedidoId: // value for 'pedidoId'
+ *   },
+ * });
+ */
+export function usePedidoQuery(baseOptions?: Apollo.QueryHookOptions<PedidoQuery, PedidoQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<PedidoQuery, PedidoQueryVariables>(PedidoDocument, options);
+      }
+export function usePedidoLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PedidoQuery, PedidoQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<PedidoQuery, PedidoQueryVariables>(PedidoDocument, options);
+        }
+export type PedidoQueryHookResult = ReturnType<typeof usePedidoQuery>;
+export type PedidoLazyQueryHookResult = ReturnType<typeof usePedidoLazyQuery>;
+export type PedidoQueryResult = Apollo.QueryResult<PedidoQuery, PedidoQueryVariables>;
+export const PedidosDocument = gql`
+    query Pedidos($pagination: PaginationArg) {
+  pedidos(pagination: $pagination) {
+    data {
+      id
+      attributes {
+        nombrePedido
+        descripcion
+        cliente
+        fecha
+        hora
+        estacionInicio
+        estacionFin
+        fehcaInicio
+        fechaFin
+        cuantoTardoInicioFin
+        user {
+          data {
+            id
+            attributes {
+              username
+              email
+              provider
+              confirmed
+              blocked
+              cargo
+              nombreCompleto
+              Area
+              createdAt
+              updatedAt
+            }
+          }
+        }
+        createdAt
+        updatedAt
+      }
+    }
+    meta {
+      pagination {
+        total
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __usePedidosQuery__
+ *
+ * To run a query within a React component, call `usePedidosQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePedidosQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePedidosQuery({
+ *   variables: {
+ *      pagination: // value for 'pagination'
+ *   },
+ * });
+ */
+export function usePedidosQuery(baseOptions?: Apollo.QueryHookOptions<PedidosQuery, PedidosQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<PedidosQuery, PedidosQueryVariables>(PedidosDocument, options);
+      }
+export function usePedidosLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PedidosQuery, PedidosQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<PedidosQuery, PedidosQueryVariables>(PedidosDocument, options);
+        }
+export type PedidosQueryHookResult = ReturnType<typeof usePedidosQuery>;
+export type PedidosLazyQueryHookResult = ReturnType<typeof usePedidosLazyQuery>;
+export type PedidosQueryResult = Apollo.QueryResult<PedidosQuery, PedidosQueryVariables>;

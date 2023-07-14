@@ -19,7 +19,6 @@ import { useForm, Controller } from 'react-hook-form'
 
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
-import { useModalRequest } from 'src/store/modalRequest'
 import { UpdateEstacion } from 'src/pages/estaciones'
 import { useEstacionesServices } from 'src/service/useEstacionesServices'
 import { toast } from 'react-hot-toast'
@@ -29,6 +28,7 @@ interface SidebarAddUserType {
   toggle: () => void
   dataEstacion: UpdateEstacion | undefined
   refetch: () => void
+  nameModal: string
 }
 
 interface UserData {
@@ -55,21 +55,20 @@ const defaultValues = {
 
 const SidebarAddUser = (props: SidebarAddUserType) => {
   // ** Props
-  const { open, toggle, dataEstacion, refetch } = props
-  const modalEstacion = useModalRequest(state => state.modalEstacion)
+  const { open, toggle, dataEstacion, refetch, nameModal } = props
 
   // ** Llama a graphql
   const { CreateEstacion, UpdateEstacion } = useEstacionesServices()
 
   useEffect(() => {
-    if (modalEstacion === 'editar') {
+    if (nameModal === 'editar') {
       setValue('nombre', dataEstacion?.nombre!)
       setValue('codigoNFC', dataEstacion?.codigoNFC!)
     } else {
       setValue('nombre', '')
       setValue('codigoNFC', '')
     }
-  }, [modalEstacion])
+  }, [nameModal])
 
   // ** Hooks
   const {
@@ -84,7 +83,7 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
     resolver: yupResolver(schema)
   })
   const onSubmit = async (data: UserData) => {
-    if (modalEstacion === 'crear') {
+    if (nameModal === 'crear') {
       const res = await CreateEstacion(data)
       if (res.res) {
         toggle()
@@ -99,7 +98,7 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
         })
       }
     }
-    if (modalEstacion === 'editar') {
+    if (nameModal === 'editar') {
       const res = await UpdateEstacion({
         updateEstacioneId: dataEstacion?.id!,
         data
@@ -189,7 +188,7 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
 
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Button type='submit' variant='contained' sx={{ mr: 3 }}>
-              {modalEstacion === 'crear' ? 'Crear estación' : 'Editar estación'}
+              {nameModal === 'crear' ? 'Crear estación' : 'Editar estación'}
             </Button>
             <Button variant='tonal' color='secondary' onClick={handleClose}>
               Cancelar
