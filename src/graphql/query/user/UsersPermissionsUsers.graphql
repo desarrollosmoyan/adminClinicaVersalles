@@ -1,0 +1,26 @@
+query UsersPermissionsUsers($pagination: PaginationArg) {
+  usersPermissionsUsers(pagination: $pagination) {
+    data {
+      attributes {
+        username
+        email
+        provider
+        confirmed
+        blocked
+
+        cargo
+        nombreCompleto
+        Area
+
+        createdAt
+        updatedAt
+      }
+      id
+    }
+    meta {
+      pagination {
+        total
+      }
+    }
+  }
+}

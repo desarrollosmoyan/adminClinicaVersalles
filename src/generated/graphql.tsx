@@ -1257,6 +1257,28 @@ export type UpdatePedidoMutationVariables = Exact<{
 
 export type UpdatePedidoMutation = { __typename?: 'Mutation', updatePedido?: { __typename?: 'PedidoEntityResponse', data?: { __typename?: 'PedidoEntity', id?: string | null } | null } | null };
 
+export type CreateUsersPermissionsUserMutationVariables = Exact<{
+  data: UsersPermissionsUserInput;
+}>;
+
+
+export type CreateUsersPermissionsUserMutation = { __typename?: 'Mutation', createUsersPermissionsUser: { __typename?: 'UsersPermissionsUserEntityResponse', data?: { __typename?: 'UsersPermissionsUserEntity', id?: string | null } | null } };
+
+export type DeleteUsersPermissionsUserMutationVariables = Exact<{
+  deleteUsersPermissionsUserId: Scalars['ID']['input'];
+}>;
+
+
+export type DeleteUsersPermissionsUserMutation = { __typename?: 'Mutation', deleteUsersPermissionsUser: { __typename?: 'UsersPermissionsUserEntityResponse', data?: { __typename?: 'UsersPermissionsUserEntity', id?: string | null } | null } };
+
+export type UpdateUsersPermissionsUserMutationVariables = Exact<{
+  updateUsersPermissionsUserId: Scalars['ID']['input'];
+  data: UsersPermissionsUserInput;
+}>;
+
+
+export type UpdateUsersPermissionsUserMutation = { __typename?: 'Mutation', updateUsersPermissionsUser: { __typename?: 'UsersPermissionsUserEntityResponse', data?: { __typename?: 'UsersPermissionsUserEntity', id?: string | null } | null } };
+
 export type EstacionesQueryVariables = Exact<{
   pagination?: InputMaybe<PaginationArg>;
 }>;
@@ -1277,6 +1299,13 @@ export type PedidosQueryVariables = Exact<{
 
 
 export type PedidosQuery = { __typename?: 'Query', pedidos?: { __typename?: 'PedidoEntityResponseCollection', data: Array<{ __typename?: 'PedidoEntity', id?: string | null, attributes?: { __typename?: 'Pedido', nombrePedido?: string | null, descripcion?: string | null, cliente?: string | null, fecha?: any | null, hora?: any | null, estacionInicio?: string | null, estacionFin?: string | null, fehcaInicio?: any | null, fechaFin?: any | null, cuantoTardoInicioFin?: string | null, createdAt?: any | null, updatedAt?: any | null, user?: { __typename?: 'UsersPermissionsUserEntityResponse', data?: { __typename?: 'UsersPermissionsUserEntity', id?: string | null, attributes?: { __typename?: 'UsersPermissionsUser', username: string, email: string, provider?: string | null, confirmed?: boolean | null, blocked?: boolean | null, cargo?: string | null, nombreCompleto?: string | null, Area?: string | null, createdAt?: any | null, updatedAt?: any | null } | null } | null } | null } | null }>, meta: { __typename?: 'ResponseCollectionMeta', pagination: { __typename?: 'Pagination', total: number } } } | null };
+
+export type UsersPermissionsUsersQueryVariables = Exact<{
+  pagination?: InputMaybe<PaginationArg>;
+}>;
+
+
+export type UsersPermissionsUsersQuery = { __typename?: 'Query', usersPermissionsUsers?: { __typename?: 'UsersPermissionsUserEntityResponseCollection', data: Array<{ __typename?: 'UsersPermissionsUserEntity', id?: string | null, attributes?: { __typename?: 'UsersPermissionsUser', username: string, email: string, provider?: string | null, confirmed?: boolean | null, blocked?: boolean | null, cargo?: string | null, nombreCompleto?: string | null, Area?: string | null, createdAt?: any | null, updatedAt?: any | null } | null }>, meta: { __typename?: 'ResponseCollectionMeta', pagination: { __typename?: 'Pagination', total: number } } } | null };
 
 
 export const LoginDocument = gql`
@@ -1531,6 +1560,112 @@ export function useUpdatePedidoMutation(baseOptions?: Apollo.MutationHookOptions
 export type UpdatePedidoMutationHookResult = ReturnType<typeof useUpdatePedidoMutation>;
 export type UpdatePedidoMutationResult = Apollo.MutationResult<UpdatePedidoMutation>;
 export type UpdatePedidoMutationOptions = Apollo.BaseMutationOptions<UpdatePedidoMutation, UpdatePedidoMutationVariables>;
+export const CreateUsersPermissionsUserDocument = gql`
+    mutation CreateUsersPermissionsUser($data: UsersPermissionsUserInput!) {
+  createUsersPermissionsUser(data: $data) {
+    data {
+      id
+    }
+  }
+}
+    `;
+export type CreateUsersPermissionsUserMutationFn = Apollo.MutationFunction<CreateUsersPermissionsUserMutation, CreateUsersPermissionsUserMutationVariables>;
+
+/**
+ * __useCreateUsersPermissionsUserMutation__
+ *
+ * To run a mutation, you first call `useCreateUsersPermissionsUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateUsersPermissionsUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createUsersPermissionsUserMutation, { data, loading, error }] = useCreateUsersPermissionsUserMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useCreateUsersPermissionsUserMutation(baseOptions?: Apollo.MutationHookOptions<CreateUsersPermissionsUserMutation, CreateUsersPermissionsUserMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateUsersPermissionsUserMutation, CreateUsersPermissionsUserMutationVariables>(CreateUsersPermissionsUserDocument, options);
+      }
+export type CreateUsersPermissionsUserMutationHookResult = ReturnType<typeof useCreateUsersPermissionsUserMutation>;
+export type CreateUsersPermissionsUserMutationResult = Apollo.MutationResult<CreateUsersPermissionsUserMutation>;
+export type CreateUsersPermissionsUserMutationOptions = Apollo.BaseMutationOptions<CreateUsersPermissionsUserMutation, CreateUsersPermissionsUserMutationVariables>;
+export const DeleteUsersPermissionsUserDocument = gql`
+    mutation DeleteUsersPermissionsUser($deleteUsersPermissionsUserId: ID!) {
+  deleteUsersPermissionsUser(id: $deleteUsersPermissionsUserId) {
+    data {
+      id
+    }
+  }
+}
+    `;
+export type DeleteUsersPermissionsUserMutationFn = Apollo.MutationFunction<DeleteUsersPermissionsUserMutation, DeleteUsersPermissionsUserMutationVariables>;
+
+/**
+ * __useDeleteUsersPermissionsUserMutation__
+ *
+ * To run a mutation, you first call `useDeleteUsersPermissionsUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteUsersPermissionsUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteUsersPermissionsUserMutation, { data, loading, error }] = useDeleteUsersPermissionsUserMutation({
+ *   variables: {
+ *      deleteUsersPermissionsUserId: // value for 'deleteUsersPermissionsUserId'
+ *   },
+ * });
+ */
+export function useDeleteUsersPermissionsUserMutation(baseOptions?: Apollo.MutationHookOptions<DeleteUsersPermissionsUserMutation, DeleteUsersPermissionsUserMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteUsersPermissionsUserMutation, DeleteUsersPermissionsUserMutationVariables>(DeleteUsersPermissionsUserDocument, options);
+      }
+export type DeleteUsersPermissionsUserMutationHookResult = ReturnType<typeof useDeleteUsersPermissionsUserMutation>;
+export type DeleteUsersPermissionsUserMutationResult = Apollo.MutationResult<DeleteUsersPermissionsUserMutation>;
+export type DeleteUsersPermissionsUserMutationOptions = Apollo.BaseMutationOptions<DeleteUsersPermissionsUserMutation, DeleteUsersPermissionsUserMutationVariables>;
+export const UpdateUsersPermissionsUserDocument = gql`
+    mutation UpdateUsersPermissionsUser($updateUsersPermissionsUserId: ID!, $data: UsersPermissionsUserInput!) {
+  updateUsersPermissionsUser(id: $updateUsersPermissionsUserId, data: $data) {
+    data {
+      id
+    }
+  }
+}
+    `;
+export type UpdateUsersPermissionsUserMutationFn = Apollo.MutationFunction<UpdateUsersPermissionsUserMutation, UpdateUsersPermissionsUserMutationVariables>;
+
+/**
+ * __useUpdateUsersPermissionsUserMutation__
+ *
+ * To run a mutation, you first call `useUpdateUsersPermissionsUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateUsersPermissionsUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateUsersPermissionsUserMutation, { data, loading, error }] = useUpdateUsersPermissionsUserMutation({
+ *   variables: {
+ *      updateUsersPermissionsUserId: // value for 'updateUsersPermissionsUserId'
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useUpdateUsersPermissionsUserMutation(baseOptions?: Apollo.MutationHookOptions<UpdateUsersPermissionsUserMutation, UpdateUsersPermissionsUserMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateUsersPermissionsUserMutation, UpdateUsersPermissionsUserMutationVariables>(UpdateUsersPermissionsUserDocument, options);
+      }
+export type UpdateUsersPermissionsUserMutationHookResult = ReturnType<typeof useUpdateUsersPermissionsUserMutation>;
+export type UpdateUsersPermissionsUserMutationResult = Apollo.MutationResult<UpdateUsersPermissionsUserMutation>;
+export type UpdateUsersPermissionsUserMutationOptions = Apollo.BaseMutationOptions<UpdateUsersPermissionsUserMutation, UpdateUsersPermissionsUserMutationVariables>;
 export const EstacionesDocument = gql`
     query Estaciones($pagination: PaginationArg) {
   estaciones(pagination: $pagination) {
@@ -1703,3 +1838,57 @@ export function usePedidosLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Pe
 export type PedidosQueryHookResult = ReturnType<typeof usePedidosQuery>;
 export type PedidosLazyQueryHookResult = ReturnType<typeof usePedidosLazyQuery>;
 export type PedidosQueryResult = Apollo.QueryResult<PedidosQuery, PedidosQueryVariables>;
+export const UsersPermissionsUsersDocument = gql`
+    query UsersPermissionsUsers($pagination: PaginationArg) {
+  usersPermissionsUsers(pagination: $pagination) {
+    data {
+      attributes {
+        username
+        email
+        provider
+        confirmed
+        blocked
+        cargo
+        nombreCompleto
+        Area
+        createdAt
+        updatedAt
+      }
+      id
+    }
+    meta {
+      pagination {
+        total
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useUsersPermissionsUsersQuery__
+ *
+ * To run a query within a React component, call `useUsersPermissionsUsersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUsersPermissionsUsersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUsersPermissionsUsersQuery({
+ *   variables: {
+ *      pagination: // value for 'pagination'
+ *   },
+ * });
+ */
+export function useUsersPermissionsUsersQuery(baseOptions?: Apollo.QueryHookOptions<UsersPermissionsUsersQuery, UsersPermissionsUsersQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UsersPermissionsUsersQuery, UsersPermissionsUsersQueryVariables>(UsersPermissionsUsersDocument, options);
+      }
+export function useUsersPermissionsUsersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UsersPermissionsUsersQuery, UsersPermissionsUsersQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UsersPermissionsUsersQuery, UsersPermissionsUsersQueryVariables>(UsersPermissionsUsersDocument, options);
+        }
+export type UsersPermissionsUsersQueryHookResult = ReturnType<typeof useUsersPermissionsUsersQuery>;
+export type UsersPermissionsUsersLazyQueryHookResult = ReturnType<typeof useUsersPermissionsUsersLazyQuery>;
+export type UsersPermissionsUsersQueryResult = Apollo.QueryResult<UsersPermissionsUsersQuery, UsersPermissionsUsersQueryVariables>;

@@ -1,0 +1,8 @@
+mutation CreateUsersPermissionsUser($data: UsersPermissionsUserInput!) {
+  createUsersPermissionsUser(data: $data) {
+    data {
+      id
+
+    }
+  }
+}
