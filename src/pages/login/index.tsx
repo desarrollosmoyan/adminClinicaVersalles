@@ -162,7 +162,7 @@ const LoginPage = () => {
           }}
         >
           <Box sx={{ width: '100%', maxWidth: 450 }}>
-            <Image src='/images/pages/logo.png' width={200} height={75} alt='logo' />
+            <Image src='/images/pages/logo.png' width={250} height={75} alt='logo' />
             {/* <svg width={34} viewBox='0 0 32 22' fill='none' xmlns='http://www.w3.org/2000/svg'>
               <path
                 fillRule='evenodd'

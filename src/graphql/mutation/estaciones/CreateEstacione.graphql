@@ -1,0 +1,7 @@
+mutation CreateEstacione($data: EstacioneInput!) {
+  createEstacione(data: $data) {
+    data {
+      id
+    }
+  }
+}

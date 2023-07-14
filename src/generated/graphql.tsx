@@ -1213,6 +1213,35 @@ export type LoginMutationVariables = Exact<{
 
 export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'UsersPermissionsLoginPayload', jwt?: string | null, user: { __typename?: 'UsersPermissionsMe', id: string, username: string, email?: string | null, confirmed?: boolean | null, blocked?: boolean | null } } };
 
+export type CreateEstacioneMutationVariables = Exact<{
+  data: EstacioneInput;
+}>;
+
+
+export type CreateEstacioneMutation = { __typename?: 'Mutation', createEstacione?: { __typename?: 'EstacioneEntityResponse', data?: { __typename?: 'EstacioneEntity', id?: string | null } | null } | null };
+
+export type DeleteEstacioneMutationVariables = Exact<{
+  deleteEstacioneId: Scalars['ID']['input'];
+}>;
+
+
+export type DeleteEstacioneMutation = { __typename?: 'Mutation', deleteEstacione?: { __typename?: 'EstacioneEntityResponse', data?: { __typename?: 'EstacioneEntity', id?: string | null } | null } | null };
+
+export type UpdateEstacioneMutationVariables = Exact<{
+  updateEstacioneId: Scalars['ID']['input'];
+  data: EstacioneInput;
+}>;
+
+
+export type UpdateEstacioneMutation = { __typename?: 'Mutation', updateEstacione?: { __typename?: 'EstacioneEntityResponse', data?: { __typename?: 'EstacioneEntity', id?: string | null } | null } | null };
+
+export type EstacionesQueryVariables = Exact<{
+  pagination?: InputMaybe<PaginationArg>;
+}>;
+
+
+export type EstacionesQuery = { __typename?: 'Query', estaciones?: { __typename?: 'EstacioneEntityResponseCollection', data: Array<{ __typename?: 'EstacioneEntity', id?: string | null, attributes?: { __typename?: 'Estacione', nombre?: string | null, codigoNFC?: string | null, createdAt?: any | null, updatedAt?: any | null } | null }>, meta: { __typename?: 'ResponseCollectionMeta', pagination: { __typename?: 'Pagination', total: number } } } | null };
+
 
 export const LoginDocument = gql`
     mutation Login($input: UsersPermissionsLoginInput!) {
@@ -1254,3 +1283,157 @@ export function useLoginMutation(baseOptions?: Apollo.MutationHookOptions<LoginM
 export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
 export type LoginMutationResult = Apollo.MutationResult<LoginMutation>;
 export type LoginMutationOptions = Apollo.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
+export const CreateEstacioneDocument = gql`
+    mutation CreateEstacione($data: EstacioneInput!) {
+  createEstacione(data: $data) {
+    data {
+      id
+    }
+  }
+}
+    `;
+export type CreateEstacioneMutationFn = Apollo.MutationFunction<CreateEstacioneMutation, CreateEstacioneMutationVariables>;
+
+/**
+ * __useCreateEstacioneMutation__
+ *
+ * To run a mutation, you first call `useCreateEstacioneMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateEstacioneMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createEstacioneMutation, { data, loading, error }] = useCreateEstacioneMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useCreateEstacioneMutation(baseOptions?: Apollo.MutationHookOptions<CreateEstacioneMutation, CreateEstacioneMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateEstacioneMutation, CreateEstacioneMutationVariables>(CreateEstacioneDocument, options);
+      }
+export type CreateEstacioneMutationHookResult = ReturnType<typeof useCreateEstacioneMutation>;
+export type CreateEstacioneMutationResult = Apollo.MutationResult<CreateEstacioneMutation>;
+export type CreateEstacioneMutationOptions = Apollo.BaseMutationOptions<CreateEstacioneMutation, CreateEstacioneMutationVariables>;
+export const DeleteEstacioneDocument = gql`
+    mutation DeleteEstacione($deleteEstacioneId: ID!) {
+  deleteEstacione(id: $deleteEstacioneId) {
+    data {
+      id
+    }
+  }
+}
+    `;
+export type DeleteEstacioneMutationFn = Apollo.MutationFunction<DeleteEstacioneMutation, DeleteEstacioneMutationVariables>;
+
+/**
+ * __useDeleteEstacioneMutation__
+ *
+ * To run a mutation, you first call `useDeleteEstacioneMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteEstacioneMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteEstacioneMutation, { data, loading, error }] = useDeleteEstacioneMutation({
+ *   variables: {
+ *      deleteEstacioneId: // value for 'deleteEstacioneId'
+ *   },
+ * });
+ */
+export function useDeleteEstacioneMutation(baseOptions?: Apollo.MutationHookOptions<DeleteEstacioneMutation, DeleteEstacioneMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteEstacioneMutation, DeleteEstacioneMutationVariables>(DeleteEstacioneDocument, options);
+      }
+export type DeleteEstacioneMutationHookResult = ReturnType<typeof useDeleteEstacioneMutation>;
+export type DeleteEstacioneMutationResult = Apollo.MutationResult<DeleteEstacioneMutation>;
+export type DeleteEstacioneMutationOptions = Apollo.BaseMutationOptions<DeleteEstacioneMutation, DeleteEstacioneMutationVariables>;
+export const UpdateEstacioneDocument = gql`
+    mutation UpdateEstacione($updateEstacioneId: ID!, $data: EstacioneInput!) {
+  updateEstacione(id: $updateEstacioneId, data: $data) {
+    data {
+      id
+    }
+  }
+}
+    `;
+export type UpdateEstacioneMutationFn = Apollo.MutationFunction<UpdateEstacioneMutation, UpdateEstacioneMutationVariables>;
+
+/**
+ * __useUpdateEstacioneMutation__
+ *
+ * To run a mutation, you first call `useUpdateEstacioneMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateEstacioneMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateEstacioneMutation, { data, loading, error }] = useUpdateEstacioneMutation({
+ *   variables: {
+ *      updateEstacioneId: // value for 'updateEstacioneId'
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useUpdateEstacioneMutation(baseOptions?: Apollo.MutationHookOptions<UpdateEstacioneMutation, UpdateEstacioneMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateEstacioneMutation, UpdateEstacioneMutationVariables>(UpdateEstacioneDocument, options);
+      }
+export type UpdateEstacioneMutationHookResult = ReturnType<typeof useUpdateEstacioneMutation>;
+export type UpdateEstacioneMutationResult = Apollo.MutationResult<UpdateEstacioneMutation>;
+export type UpdateEstacioneMutationOptions = Apollo.BaseMutationOptions<UpdateEstacioneMutation, UpdateEstacioneMutationVariables>;
+export const EstacionesDocument = gql`
+    query Estaciones($pagination: PaginationArg) {
+  estaciones(pagination: $pagination) {
+    data {
+      id
+      attributes {
+        nombre
+        codigoNFC
+        createdAt
+        updatedAt
+      }
+    }
+    meta {
+      pagination {
+        total
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useEstacionesQuery__
+ *
+ * To run a query within a React component, call `useEstacionesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useEstacionesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useEstacionesQuery({
+ *   variables: {
+ *      pagination: // value for 'pagination'
+ *   },
+ * });
+ */
+export function useEstacionesQuery(baseOptions?: Apollo.QueryHookOptions<EstacionesQuery, EstacionesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<EstacionesQuery, EstacionesQueryVariables>(EstacionesDocument, options);
+      }
+export function useEstacionesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<EstacionesQuery, EstacionesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<EstacionesQuery, EstacionesQueryVariables>(EstacionesDocument, options);
+        }
+export type EstacionesQueryHookResult = ReturnType<typeof useEstacionesQuery>;
+export type EstacionesLazyQueryHookResult = ReturnType<typeof useEstacionesLazyQuery>;
+export type EstacionesQueryResult = Apollo.QueryResult<EstacionesQuery, EstacionesQueryVariables>;

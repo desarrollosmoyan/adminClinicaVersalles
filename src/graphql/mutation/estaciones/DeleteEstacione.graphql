@@ -1,0 +1,7 @@
+mutation DeleteEstacione($deleteEstacioneId: ID!) {
+  deleteEstacione(id: $deleteEstacioneId) {
+    data {
+      id
+    }
+  }
+}

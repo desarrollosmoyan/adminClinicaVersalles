@@ -1,0 +1,7 @@
+mutation UpdateEstacione($updateEstacioneId: ID!, $data: EstacioneInput!) {
+  updateEstacione(id: $updateEstacioneId, data: $data) {
+    data {
+      id
+    }
+  }
+}
