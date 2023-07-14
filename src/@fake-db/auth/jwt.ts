@@ -58,7 +58,7 @@ mock.onPost('/jwt/login').reply(request => {
     return [200, response]
   } else {
     error = {
-      email: ['email or Password is Invalid']
+      email: ['El correo electrónico o la contraseña no son válidos']
     }
 
     return [400, { error }]

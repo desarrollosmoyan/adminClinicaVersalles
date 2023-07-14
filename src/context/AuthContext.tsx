@@ -13,6 +13,9 @@ import authConfig from 'src/configs/auth'
 // ** Types
 import { AuthValuesType, LoginParams, ErrCallbackType, UserDataType } from './types'
 
+// ** Services
+import { useAuthServices } from 'src/service/useAuthServices'
+
 // ** Defaults
 const defaultProvider: AuthValuesType = {
   user: null,
@@ -33,6 +36,9 @@ const AuthProvider = ({ children }: Props) => {
   // ** States
   const [user, setUser] = useState<UserDataType | null>(defaultProvider.user)
   const [loading, setLoading] = useState<boolean>(defaultProvider.loading)
+
+  // servicio para el login
+  const { Login } = useAuthServices()
 
   // ** Hooks
   const router = useRouter()
@@ -71,24 +77,34 @@ const AuthProvider = ({ children }: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const handleLogin = (params: LoginParams, errorCallback?: ErrCallbackType) => {
-    axios
-      .post(authConfig.loginEndpoint, params)
+  const handleLogin = async (params: LoginParams, errorCallback?: ErrCallbackType) => {
+    Login({
+      password: params.password,
+      identifier: params.email
+    })
       .then(async response => {
         params.rememberMe
-          ? window.localStorage.setItem(authConfig.storageTokenKeyName, response.data.accessToken)
+          ? window.localStorage.setItem(authConfig.storageTokenKeyName, response?.dataLogin?.jwt as string)
           : null
         const returnUrl = router.query.returnUrl
-
-        setUser({ ...response.data.userData })
-        params.rememberMe ? window.localStorage.setItem('userData', JSON.stringify(response.data.userData)) : null
+        const user = response?.dataLogin?.user
+        setUser({
+          email: user?.email!,
+          fullName: user?.username!,
+          id: +user?.id!,
+          role: 'admin',
+          username: user?.username!
+        })
+        params.rememberMe ? window.localStorage.setItem('userData', JSON.stringify(response?.dataLogin?.user)) : null
 
         const redirectURL = returnUrl && returnUrl !== '/' ? returnUrl : '/'
+        console.log(redirectURL)
 
         router.replace(redirectURL as string)
       })
 
       .catch(err => {
+        console.log(err)
         if (errorCallback) errorCallback(err)
       })
   }
