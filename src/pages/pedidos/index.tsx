@@ -35,11 +35,9 @@ interface CellType {
 export interface UpdatePedido {
   cliente?: string | undefined | null
   createdAt?: string | undefined | null
-  cuantoTardoInicioFin?: string | undefined | null
   descripcion?: string | undefined | null
   estacionFin?: string | undefined | null
   estacionInicio?: string | undefined | null
-
   nombrePedido?: string | undefined | null
   updatedAt?: string | undefined | null
   id?: string | undefined | null

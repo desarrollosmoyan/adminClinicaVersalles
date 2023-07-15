@@ -1,5 +1,5 @@
 // ** React Imports
-import { useEffect } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 // ** MUI Imports
 import Drawer from '@mui/material/Drawer'
@@ -25,6 +25,8 @@ import { toast } from 'react-hot-toast'
 import { UpdatePedido } from 'src/pages/pedidos'
 
 import { usePedidosServices } from 'src/service/usePedidosServices'
+import { useUsuariosServices } from 'src/service/useUsuariosServices'
+import { Grid, MenuItem, SelectChangeEvent } from '@mui/material'
 
 interface SidebarAddUserType {
   open: boolean
@@ -43,45 +45,48 @@ const Header = styled(Box)<BoxProps>(({ theme }) => ({
 
 const schema = yup.object().shape({
   cliente: yup.string().required(),
-  cuantoTardoInicioFin: yup.string().required(),
   descripcion: yup.string().required(),
   estacionFin: yup.string().required(),
   estacionInicio: yup.string().required(),
-
   nombrePedido: yup.string().required()
 })
 
 const defaultValues = {
   cliente: '',
-  cuantoTardoInicioFin: '',
   descripcion: '',
   estacionFin: '',
   estacionInicio: '',
-
   nombrePedido: ''
 }
 
 const SidebarAddUser = (props: SidebarAddUserType) => {
+  const [status, setStatus] = useState<string>('')
+  const handleStatusChange = useCallback((e: SelectChangeEvent<unknown>) => {
+    setStatus(e.target.value as string)
+  }, [])
+
   // ** Props
   const { open, toggle, data: dataSend, refetch, nameModal } = props
-
-  // ** Info del usuario
-  const user = JSON.parse(localStorage.getItem('userData')!)
 
   // ** Llama a graphql
   const { CreatePedido, UpdatePedido } = usePedidosServices()
 
+  // ** Llama de graphql
+  const { Usuarios } = useUsuariosServices()
+  const { dataUsuarios } = Usuarios({
+    pagination: { pageSize: 10, page: 1 }
+  })
+  console.log(dataUsuarios)
+
   useEffect(() => {
     if (nameModal === 'editar') {
       setValue('cliente', dataSend?.cliente!)
-      setValue('cuantoTardoInicioFin', dataSend?.cuantoTardoInicioFin!)
       setValue('descripcion', dataSend?.descripcion!)
       setValue('estacionInicio', dataSend?.estacionInicio!)
       setValue('estacionFin', dataSend?.estacionFin!)
       setValue('nombrePedido', dataSend?.nombrePedido!)
     } else {
       setValue('cliente', '')
-      setValue('cuantoTardoInicioFin', '')
       setValue('descripcion', '')
       setValue('estacionInicio', '')
       setValue('estacionFin', '')
@@ -102,8 +107,9 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
     resolver: yupResolver(schema)
   })
   const onSubmit = async (data: UpdatePedido) => {
+    console.log(data)
     if (nameModal === 'crear') {
-      const res = await CreatePedido({ ...data, user: user.id })
+      const res = await CreatePedido({ ...data, user: status })
       console.log(res)
       if (res.res) {
         toggle()
@@ -122,7 +128,7 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
     if (nameModal === 'editar') {
       const res = await UpdatePedido({
         updatePedidoId: dataSend?.id!,
-        data: { ...data, user: user.id }
+        data: { ...data, user: status }
       })
       if (res.res) {
         refetch()
@@ -173,7 +179,7 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
       <Box sx={{ p: theme => theme.spacing(0, 6, 6) }}>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Controller
-            name='cliente'
+            name='nombrePedido'
             control={control}
             rules={{ required: true }}
             render={({ field: { value, onChange } }) => (
@@ -181,28 +187,11 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
                 fullWidth
                 value={value}
                 sx={{ mb: 4 }}
-                label='Cliente'
+                label='Nombre Pedido'
                 onChange={onChange}
-                placeholder='Ingrese el nombre del cliente'
-                error={Boolean(errors.cliente)}
-                {...(errors.cliente && { helperText: errors.cliente.message })}
-              />
-            )}
-          />
-          <Controller
-            name='cuantoTardoInicioFin'
-            control={control}
-            rules={{ required: true }}
-            render={({ field: { value, onChange } }) => (
-              <CustomTextField
-                fullWidth
-                value={value}
-                sx={{ mb: 4 }}
-                label='Cuanto tardo Fin'
-                onChange={onChange}
-                placeholder='Ingrese cuanto tardo fin'
-                error={Boolean(errors.cuantoTardoInicioFin)}
-                {...(errors.cuantoTardoInicioFin && { helperText: errors.cuantoTardoInicioFin.message })}
+                placeholder='Ingrese un nombre pedido'
+                error={Boolean(errors.nombrePedido)}
+                {...(errors.nombrePedido && { helperText: errors.nombrePedido.message })}
               />
             )}
           />
@@ -223,6 +212,24 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
               />
             )}
           />
+          <Controller
+            name='cliente'
+            control={control}
+            rules={{ required: true }}
+            render={({ field: { value, onChange } }) => (
+              <CustomTextField
+                fullWidth
+                value={value}
+                sx={{ mb: 4 }}
+                label='Cliente'
+                onChange={onChange}
+                placeholder='Ingrese el nombre del cliente'
+                error={Boolean(errors.cliente)}
+                {...(errors.cliente && { helperText: errors.cliente.message })}
+              />
+            )}
+          />
+
           <Controller
             name='estacionInicio'
             control={control}
@@ -257,25 +264,27 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
               />
             )}
           />
+          <Grid>
+            <CustomTextField
+              select
+              fullWidth
+              sx={{ mb: 4 }}
+              defaultValue=''
+              SelectProps={{
+                value: status,
+                displayEmpty: true,
+                onChange: e => handleStatusChange(e)
+              }}
+            >
+              <MenuItem value=''>Usuario</MenuItem>
 
-          <Controller
-            name='nombrePedido'
-            control={control}
-            rules={{ required: true }}
-            render={({ field: { value, onChange } }) => (
-              <CustomTextField
-                fullWidth
-                value={value}
-                sx={{ mb: 4 }}
-                label='Nombre Pedido'
-                onChange={onChange}
-                placeholder='Ingrese un nombre pedido'
-                error={Boolean(errors.nombrePedido)}
-                {...(errors.nombrePedido && { helperText: errors.nombrePedido.message })}
-              />
-            )}
-          />
-
+              {dataUsuarios.map(item => (
+                <MenuItem key={item.id} value={item.id!}>
+                  {item.attributes?.username}
+                </MenuItem>
+              ))}
+            </CustomTextField>
+          </Grid>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Button type='submit' variant='contained' sx={{ mr: 3 }}>
               {nameModal === 'crear' ? 'Agregar pedido' : 'Editar pedido'}
