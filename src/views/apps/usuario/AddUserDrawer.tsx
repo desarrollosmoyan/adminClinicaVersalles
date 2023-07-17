@@ -1,5 +1,5 @@
 // ** React Imports
-import { useEffect } from 'react'
+// import { useEffect } from 'react'
 
 // ** MUI Imports
 import Drawer from '@mui/material/Drawer'
@@ -20,7 +20,7 @@ import { useForm, Controller } from 'react-hook-form'
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
 
-import { toast } from 'react-hot-toast'
+// import { toast } from 'react-hot-toast'
 
 import { usePedidosServices } from 'src/service/usePedidosServices'
 import { UpdateUsuario } from 'src/pages/usuarios'

@@ -27,6 +27,7 @@ import { UpdatePedido } from 'src/pages/pedidos'
 import { usePedidosServices } from 'src/service/usePedidosServices'
 import { useUsuariosServices } from 'src/service/useUsuariosServices'
 import { Grid, MenuItem, SelectChangeEvent } from '@mui/material'
+import { useEstacionesServices } from 'src/service/useEstacionesServices'
 
 interface SidebarAddUserType {
   open: boolean
@@ -46,8 +47,9 @@ const Header = styled(Box)<BoxProps>(({ theme }) => ({
 const schema = yup.object().shape({
   cliente: yup.string().required(),
   descripcion: yup.string().required(),
-  estacionFin: yup.string().required(),
-  estacionInicio: yup.string().required(),
+
+  // estacionFin: yup.string().required(),
+  // estacionInicio: yup.string().required(),
   nombrePedido: yup.string().required()
 })
 
@@ -61,15 +63,21 @@ const defaultValues = {
 
 const SidebarAddUser = (props: SidebarAddUserType) => {
   const [status, setStatus] = useState<string>('')
+  const [estacionesInicio, setEstacionesInicio] = useState('')
+  const [estacionesFinal, setEstacionesFinal] = useState('')
   const handleStatusChange = useCallback((e: SelectChangeEvent<unknown>) => {
     setStatus(e.target.value as string)
   }, [])
+  console.log(estacionesInicio, estacionesFinal)
 
   // ** Props
   const { open, toggle, data: dataSend, refetch, nameModal } = props
 
   // ** Llama a graphql
   const { CreatePedido, UpdatePedido } = usePedidosServices()
+
+  const { Estaciones } = useEstacionesServices()
+  const { dataEstaciones } = Estaciones()
 
   // ** Llama de graphql
   const { Usuarios } = useUsuariosServices()
@@ -81,15 +89,15 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
     if (nameModal === 'editar') {
       setValue('cliente', dataSend?.cliente!)
       setValue('descripcion', dataSend?.descripcion!)
-      setValue('estacionInicio', dataSend?.estacionInicio!)
-      setValue('estacionFin', dataSend?.estacionFin!)
+      setEstacionesInicio(dataSend?.estacionInicio!)
+      setEstacionesFinal(dataSend?.estacionFin!)
       setValue('nombrePedido', dataSend?.nombrePedido!)
       setStatus(dataSend?.user?.data?.id as string)
     } else {
       setValue('cliente', '')
       setValue('descripcion', '')
-      setValue('estacionInicio', '')
-      setValue('estacionFin', '')
+      setEstacionesFinal('')
+      setEstacionesInicio('')
       setValue('nombrePedido', '')
       setStatus('')
     }
@@ -110,7 +118,12 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
   const onSubmit = async (data: UpdatePedido) => {
     console.log(data)
     if (nameModal === 'crear') {
-      const res = await CreatePedido({ ...data, user: status })
+      const res = await CreatePedido({
+        ...data,
+        user: status,
+        estacionFin: estacionesFinal,
+        estacionInicio: estacionesInicio
+      })
       console.log(res)
       if (res.res) {
         toggle()
@@ -129,7 +142,7 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
     if (nameModal === 'editar') {
       const res = await UpdatePedido({
         updatePedidoId: dataSend?.id!,
-        data: { ...data, user: status }
+        data: { ...data, user: status, estacionFin: estacionesFinal, estacionInicio: estacionesInicio }
       })
       if (res.res) {
         refetch()
@@ -149,6 +162,8 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
   const handleClose = () => {
     toggle()
   }
+
+  console.log(dataEstaciones)
 
   return (
     <Drawer
@@ -231,7 +246,7 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
             )}
           />
 
-          <Controller
+          {/* <Controller
             name='estacionInicio'
             control={control}
             rules={{ required: true }}
@@ -264,7 +279,49 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
                 {...(errors.estacionFin && { helperText: errors.estacionFin.message })}
               />
             )}
-          />
+          /> */}
+          <Grid>
+            <CustomTextField
+              select
+              fullWidth
+              sx={{ mb: 4 }}
+              defaultValue={estacionesInicio}
+              SelectProps={{
+                value: estacionesInicio,
+                displayEmpty: true,
+                onChange: e => setEstacionesInicio(e.target.value as string)
+              }}
+            >
+              <MenuItem value=''>Estacion Inicio</MenuItem>
+
+              {dataEstaciones.map(item => (
+                <MenuItem key={item?.id!} value={item?.attributes?.nombre!}>
+                  {item.attributes?.nombre}
+                </MenuItem>
+              ))}
+            </CustomTextField>
+          </Grid>
+          <Grid>
+            <CustomTextField
+              select
+              fullWidth
+              sx={{ mb: 4 }}
+              defaultValue=''
+              SelectProps={{
+                value: estacionesFinal,
+                displayEmpty: true,
+                onChange: e => setEstacionesFinal(e.target.value as string)
+              }}
+            >
+              <MenuItem value=''>Estacion Final</MenuItem>
+
+              {dataEstaciones.map(item => (
+                <MenuItem key={item?.id!} value={item?.attributes?.nombre!}>
+                  {item.attributes?.nombre}
+                </MenuItem>
+              ))}
+            </CustomTextField>
+          </Grid>
           <Grid>
             <CustomTextField
               select
