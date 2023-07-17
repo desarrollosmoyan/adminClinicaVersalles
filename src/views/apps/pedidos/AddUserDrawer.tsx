@@ -76,7 +76,6 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
   const { dataUsuarios } = Usuarios({
     pagination: { pageSize: 10, page: 1 }
   })
-  console.log(dataUsuarios)
 
   useEffect(() => {
     if (nameModal === 'editar') {
@@ -85,12 +84,14 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
       setValue('estacionInicio', dataSend?.estacionInicio!)
       setValue('estacionFin', dataSend?.estacionFin!)
       setValue('nombrePedido', dataSend?.nombrePedido!)
+      setStatus(dataSend?.user?.data?.id as string)
     } else {
       setValue('cliente', '')
       setValue('descripcion', '')
       setValue('estacionInicio', '')
       setValue('estacionFin', '')
       setValue('nombrePedido', '')
+      setStatus('')
     }
   }, [nameModal])
 

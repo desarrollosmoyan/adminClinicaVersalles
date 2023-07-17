@@ -20,7 +20,7 @@ import Icon from 'src/@core/components/icon'
 
 // ** Services
 import { format } from 'date-fns'
-import { PedidoEntity } from 'src/generated/graphql'
+import { Maybe, PedidoEntity, UsersPermissionsUserEntityResponse } from 'src/generated/graphql'
 import { toast } from 'react-hot-toast'
 
 import TableHeader from 'src/components/shared/TableHeader'
@@ -41,6 +41,7 @@ export interface UpdatePedido {
   nombrePedido?: string | undefined | null
   updatedAt?: string | undefined | null
   id?: string | undefined | null
+  user?: Maybe<UsersPermissionsUserEntityResponse> | undefined
 }
 
 const RowOptions = ({
@@ -71,6 +72,7 @@ const RowOptions = ({
     setNameModal('editar')
     setIsModal(true)
     setDataPedido({ ...data.attributes!, id: data.id! })
+
     setAnchorEl(null)
   }
 
