@@ -51,23 +51,26 @@ const schema = yup.object().shape({
 })
 
 const defaultValues = {
-  cliente: '',
-  cuantoTardoInicioFin: '',
-  descripcion: '',
-  estacionFin: '',
-  estacionInicio: '',
-  nombrePedido: ''
+  area: '',
+  cargo: '',
+  email: '',
+  nombreCompleto: '',
+  username: ''
 }
 
 const SidebarAddUser = (props: SidebarAddUserType) => {
   // ** Props
   const { open, toggle, data: dataSend, refetch, nameModal } = props
+  console.log(dataSend, refetch)
 
   // ** Info del usuario
   const user = JSON.parse(localStorage.getItem('userData')!)
 
+  console.log(user)
+
   // ** Llama a graphql
   const { CreatePedido, UpdatePedido } = usePedidosServices()
+  console.log(CreatePedido, UpdatePedido)
 
   // useEffect(() => {
   //   if (nameModal === 'editar') {
@@ -89,9 +92,10 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
 
   // ** Hooks
   const {
-    reset,
+    // reset,
     control,
-    setValue,
+
+    // setValue,
     handleSubmit,
     formState: { errors }
   } = useForm({
@@ -100,6 +104,8 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
     resolver: yupResolver(schema)
   })
   const onSubmit = async (data: UpdateUsuario) => {
+    console.log(data)
+
     // if (nameModal === 'crear') {
     //   const res = await CreatePedido({ ...data, user: user.id })
     //   console.log(res)
@@ -170,7 +176,7 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
       <Box sx={{ p: theme => theme.spacing(0, 6, 6) }}>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Controller
-            name='cliente'
+            name='area'
             control={control}
             rules={{ required: true }}
             render={({ field: { value, onChange } }) => (
@@ -178,16 +184,16 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
                 fullWidth
                 value={value}
                 sx={{ mb: 4 }}
-                label='Cliente'
+                label='Area'
                 onChange={onChange}
-                placeholder='Ingrese el nombre del cliente'
-                error={Boolean(errors.cliente)}
-                {...(errors.cliente && { helperText: errors.cliente.message })}
+                placeholder='Ingrese un area '
+                error={Boolean(errors.area)}
+                {...(errors.area && { helperText: errors.area.message })}
               />
             )}
           />
           <Controller
-            name='cuantoTardoInicioFin'
+            name='cargo'
             control={control}
             rules={{ required: true }}
             render={({ field: { value, onChange } }) => (
@@ -195,16 +201,16 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
                 fullWidth
                 value={value}
                 sx={{ mb: 4 }}
-                label='Cuanto tardo Fin'
+                label='Cargo'
                 onChange={onChange}
-                placeholder='Ingrese cuanto tardo fin'
-                error={Boolean(errors.cuantoTardoInicioFin)}
-                {...(errors.cuantoTardoInicioFin && { helperText: errors.cuantoTardoInicioFin.message })}
+                placeholder='Ingrese un cargo'
+                error={Boolean(errors.cargo)}
+                {...(errors.cargo && { helperText: errors.cargo.message })}
               />
             )}
           />
           <Controller
-            name='descripcion'
+            name='email'
             control={control}
             rules={{ required: true }}
             render={({ field: { value, onChange } }) => (
@@ -212,16 +218,16 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
                 fullWidth
                 value={value}
                 sx={{ mb: 4 }}
-                label='Descripción'
+                label='Correo'
                 onChange={onChange}
-                placeholder='Ingrese una descripción'
-                error={Boolean(errors.descripcion)}
-                {...(errors.descripcion && { helperText: errors.descripcion.message })}
+                placeholder='Ingrese un correo'
+                error={Boolean(errors.email)}
+                {...(errors.email && { helperText: errors.email.message })}
               />
             )}
           />
           <Controller
-            name='estacionInicio'
+            name='nombreCompleto'
             control={control}
             rules={{ required: true }}
             render={({ field: { value, onChange } }) => (
@@ -229,16 +235,16 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
                 fullWidth
                 value={value}
                 sx={{ mb: 4 }}
-                label='Estacion Inicio'
+                label='Nombre completo'
                 onChange={onChange}
-                placeholder='Ingrese una estacion Inicio'
-                error={Boolean(errors.estacionInicio)}
-                {...(errors.estacionInicio && { helperText: errors.estacionInicio.message })}
+                placeholder='Ingrese un nombre completo'
+                error={Boolean(errors.nombreCompleto)}
+                {...(errors.nombreCompleto && { helperText: errors.nombreCompleto.message })}
               />
             )}
           />
           <Controller
-            name='estacionFin'
+            name='username'
             control={control}
             rules={{ required: true }}
             render={({ field: { value, onChange } }) => (
@@ -246,29 +252,11 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
                 fullWidth
                 value={value}
                 sx={{ mb: 4 }}
-                label='Estacion Fin'
+                label='Username'
                 onChange={onChange}
-                placeholder='Ingrese una estacion fin'
-                error={Boolean(errors.estacionFin)}
-                {...(errors.estacionFin && { helperText: errors.estacionFin.message })}
-              />
-            )}
-          />
-
-          <Controller
-            name='nombrePedido'
-            control={control}
-            rules={{ required: true }}
-            render={({ field: { value, onChange } }) => (
-              <CustomTextField
-                fullWidth
-                value={value}
-                sx={{ mb: 4 }}
-                label='Nombre Pedido'
-                onChange={onChange}
-                placeholder='Ingrese un nombre pedido'
-                error={Boolean(errors.nombrePedido)}
-                {...(errors.nombrePedido && { helperText: errors.nombrePedido.message })}
+                placeholder='Ingrese un username'
+                error={Boolean(errors.username)}
+                {...(errors.username && { helperText: errors.username.message })}
               />
             )}
           />
