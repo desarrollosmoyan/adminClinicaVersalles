@@ -33,7 +33,7 @@ import AuthGuard from 'src/@core/components/auth/AuthGuard'
 import GuestGuard from 'src/@core/components/auth/GuestGuard'
 
 // ** Spinner Import
-import Spinner from 'src/@core/components/spinner'
+import Spinner from 'src/components/shared/Spinner'
 
 // ** Contexts
 import { AuthProvider } from 'src/context/AuthContext'
