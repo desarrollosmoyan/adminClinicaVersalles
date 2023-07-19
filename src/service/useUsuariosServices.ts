@@ -4,6 +4,7 @@ import {
   useCreateUsersPermissionsUserMutation,
   useDeleteUsersPermissionsUserMutation,
   useUpdateUsersPermissionsUserMutation,
+  useUsersPermissionsUserQuery,
   useUsersPermissionsUsersQuery
 } from 'src/generated/graphql'
 
@@ -29,6 +30,27 @@ export const useUsuariosServices = () => {
     }
   }
 
+  // USUARIO
+  const Usuario = ({ usersPermissionsUserId }: { usersPermissionsUserId: string }) => {
+    const {
+      data,
+      loading: loadingUsuario,
+      error: errorUsuario,
+      refetch
+    } = useUsersPermissionsUserQuery({
+      fetchPolicy: 'network-only',
+      variables: { usersPermissionsUserId }
+    })
+    const dataUsuario = data?.usersPermissionsUser?.data ?? {}
+
+    return {
+      dataUsuario,
+      loadingUsuario,
+      errorUsuario,
+      refetch
+    }
+  }
+
   // CREATE USUARIOS
   const [createUsersPermissionsUserMutation, { loading: loadingCreate }] = useCreateUsersPermissionsUserMutation()
 
@@ -43,7 +65,7 @@ export const useUsuariosServices = () => {
     loadingCreate,
     loadingUpdate,
     loadingDelete,
-
+    Usuario,
     CreateUsuario: async (data: UsersPermissionsUserInput) => {
       try {
         const res = await createUsersPermissionsUserMutation({

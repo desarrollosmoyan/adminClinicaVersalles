@@ -78,8 +78,6 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
 
   const { Estaciones } = useEstacionesServices()
   const { dataEstaciones } = Estaciones()
-
-  // ** Llama de graphql
   const { Usuarios } = useUsuariosServices()
   const { dataUsuarios } = Usuarios({
     pagination: { pageSize: 10, page: 1 }

@@ -1,5 +1,6 @@
+/* eslint-disable lines-around-comment */
 // ** React Imports
-import { useState, MouseEvent, useCallback, Dispatch, SetStateAction } from 'react'
+import { useState, MouseEvent, useCallback } from 'react'
 
 // ** Next Imports
 
@@ -18,14 +19,10 @@ import { DataGrid, GridColDef } from '@mui/x-data-grid'
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
 
-// ** Services
-import AddUserDrawer from 'src/views/apps/usuario/AddUserDrawer'
-
-import { EstacioneEntity } from 'src/generated/graphql'
-
 import { toast } from 'react-hot-toast'
 import TableHeader from 'src/components/shared/TableHeader'
 import { useUsuariosServices } from 'src/service/useUsuariosServices'
+import { useRouter } from 'next/router'
 
 interface CellType {
   row: any
@@ -40,19 +37,7 @@ export interface UpdateUsuario {
   id?: string | undefined | null
 }
 
-const RowOptions = ({
-  data,
-  setIsModal,
-  setDataUsuario,
-  refetch,
-  setNameModal
-}: {
-  data: EstacioneEntity
-  setIsModal: Dispatch<SetStateAction<boolean>>
-  setNameModal: Dispatch<SetStateAction<string>>
-  setDataUsuario: Dispatch<SetStateAction<UpdateUsuario | undefined>>
-  refetch: () => void
-}) => {
+const RowOptions = ({ onClick, refetch, id }: { id: string; onClick: () => void; refetch: () => void }) => {
   // ** Llamada a graphql
   const { DeleteUsuario } = useUsuariosServices()
 
@@ -65,14 +50,11 @@ const RowOptions = ({
     setAnchorEl(event.currentTarget)
   }
   const handleRowOptionsClose = () => {
-    setNameModal('editar')
-    setIsModal(true)
-    setDataUsuario({ ...data.attributes!, id: data.id! })
     setAnchorEl(null)
   }
 
   const handleDelete = async () => {
-    const res = await DeleteUsuario({ deleteUsersPermissionsUserId: data.id! })
+    const res = await DeleteUsuario({ deleteUsersPermissionsUserId: id! })
     if (res.res) {
       toast.success('Usuario elimiando eliminada', {
         duration: 2000
@@ -105,7 +87,7 @@ const RowOptions = ({
         }}
         PaperProps={{ style: { minWidth: '8rem' } }}
       >
-        <MenuItem onClick={handleRowOptionsClose} sx={{ '& svg': { mr: 2 } }}>
+        <MenuItem onClick={onClick} sx={{ '& svg': { mr: 2 } }}>
           <Icon icon='tabler:edit' fontSize={20} />
           Editar
         </MenuItem>
@@ -121,10 +103,9 @@ const RowOptions = ({
 const UsuariosPage = () => {
   // ** State
   const [value, setValue] = useState<string>('')
-  const [isModal, setIsModal] = useState(false)
-  const [dataUsuario, setDataUsuario] = useState<UpdateUsuario>()
   const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 10 })
-  const [nameModal, setNameModal] = useState('crear')
+
+  const { push } = useRouter()
 
   // ** Llama de graphql
   const { Usuarios } = useUsuariosServices()
@@ -204,13 +185,7 @@ const UsuariosPage = () => {
       field: 'actions',
       headerName: 'Accciones',
       renderCell: ({ row }: CellType) => (
-        <RowOptions
-          data={row}
-          setIsModal={setIsModal}
-          setDataUsuario={setDataUsuario}
-          refetch={refetch}
-          setNameModal={setNameModal}
-        />
+        <RowOptions id={row.id} onClick={() => push(`usuarios/editar-usuario/${row.id}`)} refetch={refetch} />
       )
     }
   ]
@@ -218,10 +193,6 @@ const UsuariosPage = () => {
   const handleFilter = useCallback((val: string) => {
     setValue(val)
   }, [])
-
-  const toggleAddUserDrawer = () => {
-    setIsModal(!isModal)
-  }
 
   return (
     <Grid container spacing={6.5}>
@@ -231,7 +202,7 @@ const UsuariosPage = () => {
           <TableHeader
             value={value}
             handleFilter={handleFilter}
-            toggle={toggleAddUserDrawer}
+            toggle={() => push('usuarios/crear-usuario')}
             name='Agregar Usuario'
             nameSearch='Buscar usuarios'
           />
@@ -248,14 +219,6 @@ const UsuariosPage = () => {
           />
         </Card>
       </Grid>
-
-      <AddUserDrawer
-        open={isModal}
-        toggle={toggleAddUserDrawer}
-        data={dataUsuario}
-        refetch={refetch}
-        nameModal={nameModal}
-      />
     </Grid>
   )
 }
