@@ -46,6 +46,9 @@ const UserDropdown = (props: Props) => {
   // ** Props
   const { settings } = props
 
+  // ** Local Storage
+  const userToken = JSON.parse(window.localStorage.getItem('userData')!)
+
   // ** States
   const [anchorEl, setAnchorEl] = useState<Element | null>(null)
 
@@ -101,7 +104,7 @@ const UserDropdown = (props: Props) => {
       >
         <Avatar
           alt='John Doe'
-          src='/images/avatars/1.png'
+          src='/images/avatars/user.png'
           onClick={handleDropdownOpen}
           sx={{ width: 38, height: 38 }}
         />
@@ -124,22 +127,24 @@ const UserDropdown = (props: Props) => {
                 horizontal: 'right'
               }}
             >
-              <Avatar alt='John Doe' src='/images/avatars/1.png' sx={{ width: '2.5rem', height: '2.5rem' }} />
+              <Avatar alt='John Doe' src='/images/avatars/user.png' sx={{ width: '2.5rem', height: '2.5rem' }} />
             </Badge>
             <Box sx={{ display: 'flex', ml: 2.5, alignItems: 'flex-start', flexDirection: 'column' }}>
-              <Typography sx={{ fontWeight: 500 }}>John Doe</Typography>
+              <Typography sx={{ fontWeight: 500, textTransform: 'capitalize' }}>
+                {userToken ? userToken.username : 'John '}
+              </Typography>
               <Typography variant='body2'>Admin</Typography>
             </Box>
           </Box>
         </Box>
         <Divider sx={{ my: theme => `${theme.spacing(2)} !important` }} />
-        <MenuItemStyled sx={{ p: 0 }} onClick={() => handleDropdownClose()}>
+        <MenuItemStyled sx={{ p: 0 }} onClick={() => handleDropdownClose('/perfil')}>
           <Box sx={styles}>
             <Icon icon='tabler:user-check' />
-            My Profile
+            Perfil
           </Box>
         </MenuItemStyled>
-        <MenuItemStyled sx={{ p: 0 }} onClick={() => handleDropdownClose()}>
+        {/* <MenuItemStyled sx={{ p: 0 }} onClick={() => handleDropdownClose()}>
           <Box sx={styles}>
             <Icon icon='tabler:settings' />
             Settings
@@ -150,8 +155,8 @@ const UserDropdown = (props: Props) => {
             <Icon icon='tabler:credit-card' />
             Billing
           </Box>
-        </MenuItemStyled>
-        <Divider sx={{ my: theme => `${theme.spacing(2)} !important` }} />
+        </MenuItemStyled> */}
+        {/* <Divider sx={{ my: theme => `${theme.spacing(2)} !important` }} />
         <MenuItemStyled sx={{ p: 0 }} onClick={() => handleDropdownClose()}>
           <Box sx={styles}>
             <Icon icon='tabler:lifebuoy' />
@@ -169,12 +174,12 @@ const UserDropdown = (props: Props) => {
             <Icon icon='tabler:currency-dollar' />
             Pricing
           </Box>
-        </MenuItemStyled>
+        </MenuItemStyled> */}
         <Divider sx={{ my: theme => `${theme.spacing(2)} !important` }} />
         <MenuItemStyled sx={{ p: 0 }} onClick={handleLogout}>
           <Box sx={styles}>
             <Icon icon='tabler:logout' />
-            Sign Out
+            Cerrar Sesión
           </Box>
         </MenuItemStyled>
       </Menu>

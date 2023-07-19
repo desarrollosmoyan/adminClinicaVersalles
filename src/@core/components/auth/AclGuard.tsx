@@ -15,7 +15,7 @@ import { buildAbilityFor } from 'src/configs/acl'
 
 // ** Component Import
 import NotAuthorized from 'src/pages/401'
-import Spinner from 'src/@core/components/spinner'
+import Spinner from 'src/components/shared/Spinner'
 import BlankLayout from 'src/@core/layouts/BlankLayout'
 
 // ** Hooks

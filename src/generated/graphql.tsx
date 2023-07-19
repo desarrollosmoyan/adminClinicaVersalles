@@ -1308,7 +1308,7 @@ export type UsersPermissionsUserQueryVariables = Exact<{
 }>;
 
 
-export type UsersPermissionsUserQuery = { __typename?: 'Query', usersPermissionsUser?: { __typename?: 'UsersPermissionsUserEntityResponse', data?: { __typename?: 'UsersPermissionsUserEntity', attributes?: { __typename?: 'UsersPermissionsUser', username: string, email: string, cargo?: string | null, nombreCompleto?: string | null, Area?: string | null } | null } | null } | null };
+export type UsersPermissionsUserQuery = { __typename?: 'Query', usersPermissionsUser?: { __typename?: 'UsersPermissionsUserEntityResponse', data?: { __typename?: 'UsersPermissionsUserEntity', attributes?: { __typename?: 'UsersPermissionsUser', username: string, email: string, cargo?: string | null, nombreCompleto?: string | null, Area?: string | null, pedidos?: { __typename?: 'PedidoRelationResponseCollection', data: Array<{ __typename?: 'PedidoEntity', attributes?: { __typename?: 'Pedido', nombrePedido?: string | null, descripcion?: string | null, cliente?: string | null, fecha?: any | null, hora?: any | null, estacionInicio?: string | null, estacionFin?: string | null, fehcaInicio?: any | null, fechaFin?: any | null, cuantoTardoInicioFin?: string | null, estado?: boolean | null } | null }> } | null, turnos?: { __typename?: 'TurnoRelationResponseCollection', data: Array<{ __typename?: 'TurnoEntity', attributes?: { __typename?: 'Turno', fin?: any | null, inicio?: any | null, nombre?: string | null } | null }> } | null } | null } | null } | null };
 
 export type UsersPermissionsUsersQueryVariables = Exact<{
   pagination?: InputMaybe<PaginationArg>;
@@ -1858,6 +1858,32 @@ export const UsersPermissionsUserDocument = gql`
         cargo
         nombreCompleto
         Area
+        pedidos {
+          data {
+            attributes {
+              nombrePedido
+              descripcion
+              cliente
+              fecha
+              hora
+              estacionInicio
+              estacionFin
+              fehcaInicio
+              fechaFin
+              cuantoTardoInicioFin
+              estado
+            }
+          }
+        }
+        turnos {
+          data {
+            attributes {
+              fin
+              inicio
+              nombre
+            }
+          }
+        }
       }
     }
   }

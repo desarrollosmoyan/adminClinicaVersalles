@@ -44,7 +44,6 @@ const AuthProvider = ({ children }: Props) => {
     const initAuth = async (): Promise<void> => {
       const storedToken = window.localStorage.getItem(authConfig.storageTokenKeyName)!
       const userToken = JSON.parse(window.localStorage.getItem('userData')!)
-      console.log(storedToken, 'storedToken')
       if (storedToken) {
         setLoading(false)
         setUser(userToken)
@@ -59,37 +58,9 @@ const AuthProvider = ({ children }: Props) => {
           router.replace('/login')
         }
       }
-
-      // if (storedToken) {
-      //   setLoading(true)
-      //   await axios
-      //     .get(authConfig.meEndpoint, {
-      //       headers: {
-      //         Authorization: storedToken
-      //       }
-      //     })
-      //     .then(async response => {
-      //       setLoading(false)
-      //       setUser({ ...response.data.userData })
-      //     })
-      //     .catch(() => {
-      //       localStorage.removeItem('userData')
-      //       localStorage.removeItem('refreshToken')
-      //       localStorage.removeItem('accessToken')
-      //       setUser(null)
-      //       setLoading(false)
-      //       console.log(authConfig.onTokenExpiration)
-      //       if (authConfig.onTokenExpiration === 'logout' && !router.pathname.includes('login')) {
-      //         router.replace('/login')
-      //       }
-      //     })
-      // } else {
-      //   setLoading(false)
-      // }
     }
 
     initAuth()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const handleLogin = async (params: LoginParams, errorCallback?: ErrCallbackType) => {

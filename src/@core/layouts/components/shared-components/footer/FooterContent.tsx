@@ -22,7 +22,7 @@ const FooterContent = () => {
         <Box component='span' sx={{ mx: 1, color: 'error.main' }}>
           ❤️
         </Box>
-        {`by`}
+        {`por`}
         <Typography sx={{ ml: 1 }} target='_blank' href='https://pixinvent.com' component={StyledCompanyName}>
           Desarrollos Moyan
         </Typography>
