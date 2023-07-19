@@ -42,13 +42,13 @@ const Error500 = () => {
       <Box sx={{ p: 5, display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
         <BoxWrapper>
           <Typography variant='h2' sx={{ mb: 1.5 }}>
-            Oops, something went wrong!
+            ¡Huy! Algo salió mal!
           </Typography>
           <Typography sx={{ mb: 6, color: 'text.secondary' }}>
-            There was an error with the internal server. Please contact your site administrator.
+            Hubo un error con el servidor interno. Póngase en contacto con el administrador de su sitio.
           </Typography>
           <Button href='/' component={Link} variant='contained'>
-            Back to Home
+            Regresar al inicio
           </Button>
         </BoxWrapper>
         <Img height='500' alt='error-illustration' src='/images/pages/404.png' />

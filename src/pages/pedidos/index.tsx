@@ -139,11 +139,11 @@ const PedidosPage = () => {
   const [isModal, setIsModal] = useState(false)
   const [nameModal, setNameModal] = useState('crear')
   const [dataPedido, setDataPedido] = useState<UpdatePedido | undefined>()
-  const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 10 })
+  const [paginationModel, setPaginationModel] = useState({ page: 1, pageSize: 10 })
 
   // ** Llama de graphql
   const { Pedidos } = usePedidosServices()
-  const { dataPedidos, refetch } = Pedidos({
+  const { dataPedidos, refetch, loadingPedidos } = Pedidos({
     pagination: { pageSize: paginationModel.pageSize, page: paginationModel.page }
   })
 
@@ -291,6 +291,7 @@ const PedidosPage = () => {
             paginationModel={paginationModel}
             onPaginationModelChange={setPaginationModel}
             localeText={{ noRowsLabel: 'No hay información' }}
+            loading={loadingPedidos}
           />
         </Card>
       </Grid>

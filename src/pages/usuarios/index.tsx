@@ -103,13 +103,13 @@ const RowOptions = ({ onClick, refetch, id }: { id: string; onClick: () => void;
 const UsuariosPage = () => {
   // ** State
   const [value, setValue] = useState<string>('')
-  const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 10 })
+  const [paginationModel, setPaginationModel] = useState({ page: 1, pageSize: 10 })
 
   const { push } = useRouter()
 
   // ** Llama de graphql
   const { Usuarios } = useUsuariosServices()
-  const { dataUsuarios, refetch } = Usuarios({
+  const { dataUsuarios, refetch, loadingUsuarios } = Usuarios({
     pagination: { pageSize: paginationModel.pageSize, page: paginationModel.page }
   })
 
@@ -216,6 +216,7 @@ const UsuariosPage = () => {
             paginationModel={paginationModel}
             onPaginationModelChange={setPaginationModel}
             localeText={{ noRowsLabel: 'No hay información' }}
+            loading={loadingUsuarios}
           />
         </Card>
       </Grid>

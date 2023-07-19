@@ -126,12 +126,12 @@ const EstacionesPage = () => {
   const [value, setValue] = useState<string>('')
   const [isModal, setIsModal] = useState(false)
   const [dataEstacion, setDataEstacion] = useState<UpdateEstacion | undefined>()
-  const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 10 })
+  const [paginationModel, setPaginationModel] = useState({ page: 1, pageSize: 10 })
   const [nameModal, setNameModal] = useState('crear')
 
   // ** Llama de graphql
   const { Estaciones } = useEstacionesServices()
-  const { dataEstaciones, refetch } = Estaciones()
+  const { dataEstaciones, refetch, loadingEstaciones } = Estaciones()
 
   // ** Columns
   const columns: GridColDef[] = [
@@ -241,7 +241,10 @@ const EstacionesPage = () => {
             pageSizeOptions={[10, 25, 50]}
             paginationModel={paginationModel}
             onPaginationModelChange={setPaginationModel}
-            localeText={{ noRowsLabel: 'No hay información' }}
+            localeText={{
+              noRowsLabel: 'No hay información'
+            }}
+            loading={loadingEstaciones}
           />
         </Card>
       </Grid>

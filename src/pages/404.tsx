@@ -42,13 +42,13 @@ const Error404 = () => {
       <Box sx={{ p: 5, display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
         <BoxWrapper>
           <Typography variant='h2' sx={{ mb: 1.5 }}>
-            Page Not Found :(
+            Página no encontrada :(
           </Typography>
           <Typography sx={{ mb: 6, color: 'text.secondary' }}>
-            Oops! 😖 The requested URL was not found on this server.
+            ¡Ups! 😖 La URL solicitada no se encontró en este servidor.
           </Typography>
           <Button href='/' component={Link} variant='contained'>
-            Back to Home
+            Regresar al inicio
           </Button>
         </BoxWrapper>
         <Img height='500' alt='error-illustration' src='/images/pages/404.png' />
