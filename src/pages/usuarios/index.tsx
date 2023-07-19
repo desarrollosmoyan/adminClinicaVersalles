@@ -207,6 +207,12 @@ const UsuariosPage = () => {
             nameSearch='Buscar usuarios'
           />
           <DataGrid
+            componentsProps={{
+              pagination: {
+                labelRowsPerPage: 'Filas por página'
+              }
+            }}
+            // pagination={{ labelRowsPerPage: 'Filas por página' }}
             autoHeight
             rowHeight={62}
             rows={dataUsuarios}
@@ -215,7 +221,8 @@ const UsuariosPage = () => {
             pageSizeOptions={[10, 25, 50]}
             paginationModel={paginationModel}
             onPaginationModelChange={setPaginationModel}
-            localeText={{ noRowsLabel: 'No hay información' }}
+            // localeText={{ noRowsLabel: 'No hay información' }}
+            localeText={{ noRowsLabel: 'No hay información', footerTotalRows: 'Total Rows:' }}
             loading={loadingUsuarios}
           />
         </Card>

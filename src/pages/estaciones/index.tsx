@@ -245,6 +245,11 @@ const EstacionesPage = () => {
               noRowsLabel: 'No hay información'
             }}
             loading={loadingEstaciones}
+            componentsProps={{
+              pagination: {
+                labelRowsPerPage: 'Filas por página'
+              }
+            }}
           />
         </Card>
       </Grid>

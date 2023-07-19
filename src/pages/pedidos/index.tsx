@@ -292,6 +292,11 @@ const PedidosPage = () => {
             onPaginationModelChange={setPaginationModel}
             localeText={{ noRowsLabel: 'No hay información' }}
             loading={loadingPedidos}
+            componentsProps={{
+              pagination: {
+                labelRowsPerPage: 'Filas por página'
+              }
+            }}
           />
         </Card>
       </Grid>
