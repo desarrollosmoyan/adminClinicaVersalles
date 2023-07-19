@@ -4,9 +4,6 @@ import { createContext, useEffect, useState, ReactNode } from 'react'
 // ** Next Import
 import { useRouter } from 'next/router'
 
-// ** Axios
-import axios from 'axios'
-
 // ** Config
 import authConfig from 'src/configs/auth'
 
@@ -46,33 +43,49 @@ const AuthProvider = ({ children }: Props) => {
   useEffect(() => {
     const initAuth = async (): Promise<void> => {
       const storedToken = window.localStorage.getItem(authConfig.storageTokenKeyName)!
+      const userToken = JSON.parse(window.localStorage.getItem('userData')!)
       console.log(storedToken, 'storedToken')
       if (storedToken) {
-        setLoading(true)
-        await axios
-          .get(authConfig.meEndpoint, {
-            headers: {
-              Authorization: storedToken
-            }
-          })
-          .then(async response => {
-            setLoading(false)
-            setUser({ ...response.data.userData })
-          })
-          .catch(() => {
-            localStorage.removeItem('userData')
-            localStorage.removeItem('refreshToken')
-            localStorage.removeItem('accessToken')
-            setUser(null)
-            setLoading(false)
-            console.log(authConfig.onTokenExpiration)
-            if (authConfig.onTokenExpiration === 'logout' && !router.pathname.includes('login')) {
-              router.replace('/login')
-            }
-          })
-      } else {
         setLoading(false)
+        setUser(userToken)
+      } else {
+        localStorage.removeItem('userData')
+        localStorage.removeItem('refreshToken')
+        localStorage.removeItem('accessToken')
+        setUser(null)
+        setLoading(false)
+        console.log(authConfig.onTokenExpiration)
+        if (authConfig.onTokenExpiration === 'logout' && !router.pathname.includes('login')) {
+          router.replace('/login')
+        }
       }
+
+      // if (storedToken) {
+      //   setLoading(true)
+      //   await axios
+      //     .get(authConfig.meEndpoint, {
+      //       headers: {
+      //         Authorization: storedToken
+      //       }
+      //     })
+      //     .then(async response => {
+      //       setLoading(false)
+      //       setUser({ ...response.data.userData })
+      //     })
+      //     .catch(() => {
+      //       localStorage.removeItem('userData')
+      //       localStorage.removeItem('refreshToken')
+      //       localStorage.removeItem('accessToken')
+      //       setUser(null)
+      //       setLoading(false)
+      //       console.log(authConfig.onTokenExpiration)
+      //       if (authConfig.onTokenExpiration === 'logout' && !router.pathname.includes('login')) {
+      //         router.replace('/login')
+      //       }
+      //     })
+      // } else {
+      //   setLoading(false)
+      // }
     }
 
     initAuth()
@@ -97,7 +110,9 @@ const AuthProvider = ({ children }: Props) => {
           role: 'admin',
           username: user?.username!
         })
-        params.rememberMe ? window.localStorage.setItem('userData', JSON.stringify(response?.dataLogin?.user)) : null
+        params.rememberMe
+          ? window.localStorage.setItem('userData', JSON.stringify({ ...response?.dataLogin?.user, role: 'admin' }))
+          : null
 
         const redirectURL = returnUrl && returnUrl !== '/' ? returnUrl : '/'
         console.log(redirectURL)
