@@ -102,6 +102,7 @@ const CreateUsuarioPage = () => {
                 displayEmpty: true,
                 onChange: e => setEstaciones(e.target.value as string)
               }}
+              label='Areas'
             >
               <MenuItem value=''>Areas</MenuItem>
 

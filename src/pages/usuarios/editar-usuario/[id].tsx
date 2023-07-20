@@ -52,19 +52,17 @@ const EditarUsuarioPage = () => {
     push,
     query: { id }
   } = useRouter()
-  console.log(id)
 
   //** Llamada a graphql
   const { Estaciones } = useEstacionesServices()
   const { dataEstaciones } = Estaciones()
   const { UpdateUsuario, Usuario } = useUsuariosServices()
   const { dataUsuario, loadingUsuario } = Usuario({ usersPermissionsUserId: id as string })
-  console.log(loadingUsuario, dataUsuario, 'dataUsuario')
 
   //** Useeffect for default values
   useEffect(() => {
     if (!loadingUsuario) {
-      setEstaciones(dataUsuario?.attributes?.Area!)
+      setEstaciones(dataUsuario?.attributes?.Area! || '')
       setValue('cargo', dataUsuario?.attributes?.cargo!)
       setValue('email', dataUsuario?.attributes?.email!)
       setValue('nombreCompleto', dataUsuario?.attributes?.nombreCompleto!)
@@ -121,6 +119,7 @@ const EditarUsuarioPage = () => {
                 displayEmpty: true,
                 onChange: e => setEstaciones(e.target.value as string)
               }}
+              label='Araes'
             >
               <MenuItem value=''>Areas</MenuItem>
 

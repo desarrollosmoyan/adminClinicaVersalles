@@ -161,8 +161,6 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
     toggle()
   }
 
-  console.log(dataEstaciones)
-
   return (
     <Drawer
       open={open}
@@ -244,40 +242,6 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
             )}
           />
 
-          {/* <Controller
-            name='estacionInicio'
-            control={control}
-            rules={{ required: true }}
-            render={({ field: { value, onChange } }) => (
-              <CustomTextField
-                fullWidth
-                value={value}
-                sx={{ mb: 4 }}
-                label='Estacion Inicio'
-                onChange={onChange}
-                placeholder='Ingrese una estacion Inicio'
-                error={Boolean(errors.estacionInicio)}
-                {...(errors.estacionInicio && { helperText: errors.estacionInicio.message })}
-              />
-            )}
-          />
-          <Controller
-            name='estacionFin'
-            control={control}
-            rules={{ required: true }}
-            render={({ field: { value, onChange } }) => (
-              <CustomTextField
-                fullWidth
-                value={value}
-                sx={{ mb: 4 }}
-                label='Estacion Fin'
-                onChange={onChange}
-                placeholder='Ingrese una estacion fin'
-                error={Boolean(errors.estacionFin)}
-                {...(errors.estacionFin && { helperText: errors.estacionFin.message })}
-              />
-            )}
-          /> */}
           <Grid>
             <CustomTextField
               select
@@ -286,9 +250,11 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
               defaultValue={estacionesInicio}
               SelectProps={{
                 value: estacionesInicio,
+
                 displayEmpty: true,
                 onChange: e => setEstacionesInicio(e.target.value as string)
               }}
+              label='Estacion Inicio'
             >
               <MenuItem value=''>Estacion Inicio</MenuItem>
 
@@ -310,6 +276,7 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
                 displayEmpty: true,
                 onChange: e => setEstacionesFinal(e.target.value as string)
               }}
+              label='Estacion Final'
             >
               <MenuItem value=''>Estacion Final</MenuItem>
 
@@ -331,6 +298,7 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
                 displayEmpty: true,
                 onChange: e => handleStatusChange(e)
               }}
+              label='Usuarios'
             >
               <MenuItem value=''>Usuario</MenuItem>
 
