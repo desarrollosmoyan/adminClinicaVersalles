@@ -24,7 +24,7 @@ const FooterContent = () => {
         </Box>
         {`por`}
         <Typography sx={{ ml: 1 }} target='_blank' href='https://pixinvent.com' component={StyledCompanyName}>
-          Desarrollos Moyan
+          ---
         </Typography>
       </Typography>
     </Box>
