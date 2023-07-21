@@ -8,6 +8,16 @@ const path = require('path')
 module.exports = {
   trailingSlash: true,
   reactStrictMode: false,
+  experimental: {
+    images: {
+      unoptimized: true
+    }
+  },
+
+  // images: {
+  //   loader: 'imgix',
+  //   path: '',
+  // },
   webpack: config => {
     config.resolve.alias = {
       ...config.resolve.alias,
