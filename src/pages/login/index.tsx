@@ -81,13 +81,13 @@ const FormControlLabel = styled(MuiFormControlLabel)<FormControlLabelProps>(({ t
 }))
 
 const schema = yup.object().shape({
-  email: yup.string().email().required('Ingrese un correo válido'),
+  email: yup.string().required('Ingrese un correo válido'),
   password: yup.string().min(5).required('Ingrese una contraseña válida')
 })
 
 const defaultValues = {
   password: '123456',
-  email: 'jo@gmail.com'
+  email: 'jose'
 }
 
 interface FormData {
@@ -201,7 +201,7 @@ const LoginPage = () => {
             </Box>
             <Alert icon={false} sx={{ py: 3, mb: 6, ...bgColors.primaryLight, '& .MuiAlert-message': { p: 0 } }}>
               <Typography variant='body2' sx={{ mb: 2, color: 'primary.main' }}>
-                Admin: <strong>jo@gmail.com</strong> / Cont: <strong>123456</strong>
+                Admin: <strong>jose</strong> / Cont: <strong>123456</strong>
               </Typography>
             </Alert>
             <form noValidate autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
@@ -218,7 +218,7 @@ const LoginPage = () => {
                       value={value}
                       onBlur={onBlur}
                       onChange={onChange}
-                      placeholder='jo@gmail.com'
+                      placeholder='username'
                       error={Boolean(errors.email)}
                       {...(errors.email && { helperText: errors.email.message })}
                     />
