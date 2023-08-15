@@ -63,6 +63,8 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
   const [status, setStatus] = useState<string>('')
   const [estacionesInicio, setEstacionesInicio] = useState('')
   const [estacionesFinal, setEstacionesFinal] = useState('')
+  const [identificacion, setIdentificacion] = useState('')
+
   const handleStatusChange = useCallback((e: SelectChangeEvent<unknown>) => {
     setStatus(e.target.value as string)
   }, [])
@@ -166,6 +168,26 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
     toggle()
   }
 
+  // DATA PARA EL SELECT DE TIPO DE INDENTIFICACION
+  const typeIndentification = [
+    {
+      value: 'cedula de ciudadania',
+      label: 'Cedula de ciudadania'
+    },
+    {
+      value: 'tarjeta de identidad',
+      label: 'Tarjeta de identidad'
+    },
+    {
+      value: 'pasaporte',
+      label: 'Pasaporte'
+    },
+    {
+      value: 'cedula de extranjeria',
+      label: 'Cedula de extranjeria'
+    }
+  ]
+
   return (
     <Drawer
       open={open}
@@ -195,58 +217,33 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
       </Header>
       <Box sx={{ p: theme => theme.spacing(0, 6, 6) }}>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <Controller
-            name='nombrePedido'
-            control={control}
-            rules={{ required: true }}
-            render={({ field: { value, onChange } }) => (
-              <CustomTextField
-                fullWidth
-                value={value}
-                sx={{ mb: 4 }}
-                label='Nombre Pedido'
-                onChange={onChange}
-                placeholder='Ingrese un nombre pedido'
-                error={Boolean(errors.nombrePedido)}
-                {...(errors.nombrePedido && { helperText: errors.nombrePedido.message })}
-              />
-            )}
-          />
-          <Controller
-            name='descripcion'
-            control={control}
-            rules={{ required: true }}
-            render={({ field: { value, onChange } }) => (
-              <CustomTextField
-                fullWidth
-                value={value}
-                sx={{ mb: 4 }}
-                label='Descripción'
-                onChange={onChange}
-                placeholder='Ingrese una descripción'
-                error={Boolean(errors.descripcion)}
-                {...(errors.descripcion && { helperText: errors.descripcion.message })}
-              />
-            )}
-          />
-          <Controller
-            name='cliente'
-            control={control}
-            rules={{ required: true }}
-            render={({ field: { value, onChange } }) => (
-              <CustomTextField
-                fullWidth
-                value={value}
-                sx={{ mb: 4 }}
-                label='Cliente'
-                onChange={onChange}
-                placeholder='Ingrese el nombre del cliente'
-                error={Boolean(errors.cliente)}
-                {...(errors.cliente && { helperText: errors.cliente.message })}
-              />
-            )}
-          />
+          {/* SELECT CARGO */}
+          <Grid>
+            <CustomTextField
+              select
+              fullWidth
+              sx={{ mb: 4 }}
+              defaultValue=''
+              SelectProps={{
+                value: status,
+                displayEmpty: true,
+                onChange: e => handleStatusChange(e)
+              }}
+              label='Cargos'
+            >
+              <MenuItem value=''>Cargos</MenuItem>
 
+              {dataCargos.map(item => (
+                <MenuItem key={item.id} value={item.id!}>
+                  {item.attributes?.nombre}
+                </MenuItem>
+              ))}
+            </CustomTextField>
+          </Grid>
+
+          {/* ==== */}
+
+          {/* SELECT INICIO */}
           <Grid>
             <CustomTextField
               select
@@ -270,6 +267,9 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
               ))}
             </CustomTextField>
           </Grid>
+          {/* ====== */}
+
+          {/* SELECT FINAL */}
           <Grid>
             <CustomTextField
               select
@@ -292,6 +292,29 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
               ))}
             </CustomTextField>
           </Grid>
+          {/* ===== */}
+
+          {/* NOMBRE DEL PACIENTE */}
+          <Controller
+            name='cliente'
+            control={control}
+            rules={{ required: true }}
+            render={({ field: { value, onChange } }) => (
+              <CustomTextField
+                fullWidth
+                value={value}
+                sx={{ mb: 4 }}
+                label='Nombre del paciente'
+                onChange={onChange}
+                placeholder='Ingrese el nombre del paciente'
+                error={Boolean(errors.cliente)}
+                {...(errors.cliente && { helperText: errors.cliente.message })}
+              />
+            )}
+          />
+          {/* ==== */}
+
+          {/* IDENTIFICACION*/}
           <Grid>
             <CustomTextField
               select
@@ -299,21 +322,57 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
               sx={{ mb: 4 }}
               defaultValue=''
               SelectProps={{
-                value: status,
+                value: identificacion,
                 displayEmpty: true,
-                onChange: e => handleStatusChange(e)
+                onChange: e => setIdentificacion(e.target.value as string)
               }}
-              label='Cargos'
+              label='Tipo de documento'
             >
-              <MenuItem value=''>Cargos</MenuItem>
+              <MenuItem value=''>Seleccione tipo de documento</MenuItem>
 
-              {dataCargos.map(item => (
-                <MenuItem key={item.id} value={item.id!}>
-                  {item.attributes?.nombre}
+              {typeIndentification.map(item => (
+                <MenuItem key={item?.value} value={item?.value}>
+                  {item.label}
                 </MenuItem>
               ))}
             </CustomTextField>
           </Grid>
+          {/* ===== */}
+          {/* <Controller
+            name='nombrePedido'
+            control={control}
+            rules={{ required: true }}
+            render={({ field: { value, onChange } }) => (
+              <CustomTextField
+                fullWidth
+                value={value}
+                sx={{ mb: 4 }}
+                label='Nombre Pedido'
+                onChange={onChange}
+                placeholder='Ingrese un nombre pedido'
+                error={Boolean(errors.nombrePedido)}
+                {...(errors.nombrePedido && { helperText: errors.nombrePedido.message })}
+              />
+            )}
+          /> */}
+          <Controller
+            name='descripcion'
+            control={control}
+            rules={{ required: true }}
+            render={({ field: { value, onChange } }) => (
+              <CustomTextField
+                fullWidth
+                value={value}
+                sx={{ mb: 4 }}
+                label='Descripción'
+                onChange={onChange}
+                placeholder='Ingrese una descripción'
+                error={Boolean(errors.descripcion)}
+                {...(errors.descripcion && { helperText: errors.descripcion.message })}
+              />
+            )}
+          />
+
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Button type='submit' variant='contained' sx={{ mr: 3 }}>
               {nameModal === 'crear' ? 'Agregar pedido' : 'Editar pedido'}
