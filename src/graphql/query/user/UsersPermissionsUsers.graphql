@@ -7,8 +7,13 @@ query UsersPermissionsUsers($pagination: PaginationArg) {
         provider
         confirmed
         blocked
-
-        cargo
+        cargo {
+          data {
+            attributes {
+              nombre
+            }
+          }
+        }
         nombreCompleto
         Area
 

@@ -3,17 +3,26 @@ query Pedido($pedidoId: ID) {
     data {
       id
       attributes {
+        cargo {
+          data {
+            id
+            attributes {
+              nombre
+            }
+          }
+        }
+
         nombrePedido
         descripcion
         cliente
-        fecha
         hora
         estacionInicio
         estacionFin
+        cuantoTardoInicioFin
+        estado
         fehcaInicio
         fechaFin
-        cuantoTardoInicioFin
-
+        fecha
         createdAt
         updatedAt
       }

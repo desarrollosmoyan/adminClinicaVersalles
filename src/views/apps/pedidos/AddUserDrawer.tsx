@@ -24,10 +24,11 @@ import { toast } from 'react-hot-toast'
 
 import { UpdatePedido } from 'src/pages/pedidos'
 
+// ** Graphql Imports
 import { usePedidosServices } from 'src/service/usePedidosServices'
-import { useUsuariosServices } from 'src/service/useUsuariosServices'
 import { Grid, MenuItem, SelectChangeEvent } from '@mui/material'
 import { useEstacionesServices } from 'src/service/useEstacionesServices'
+import { useCargosServices } from 'src/service/useCargosServices'
 
 interface SidebarAddUserType {
   open: boolean
@@ -47,9 +48,6 @@ const Header = styled(Box)<BoxProps>(({ theme }) => ({
 const schema = yup.object().shape({
   cliente: yup.string().required(),
   descripcion: yup.string().required(),
-
-  // estacionFin: yup.string().required(),
-  // estacionInicio: yup.string().required(),
   nombrePedido: yup.string().required()
 })
 
@@ -68,7 +66,6 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
   const handleStatusChange = useCallback((e: SelectChangeEvent<unknown>) => {
     setStatus(e.target.value as string)
   }, [])
-  console.log(estacionesInicio, estacionesFinal)
 
   // ** Props
   const { open, toggle, data: dataSend, refetch, nameModal } = props
@@ -78,8 +75,9 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
 
   const { Estaciones } = useEstacionesServices()
   const { dataEstaciones } = Estaciones()
-  const { Usuarios } = useUsuariosServices()
-  const { dataUsuarios } = Usuarios({
+
+  const { Cargos } = useCargosServices()
+  const { dataCargos } = Cargos({
     pagination: { pageSize: 10, page: 1 }
   })
 
@@ -90,7 +88,7 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
       setEstacionesInicio(dataSend?.estacionInicio!)
       setEstacionesFinal(dataSend?.estacionFin!)
       setValue('nombrePedido', dataSend?.nombrePedido!)
-      setStatus(dataSend?.user?.data?.id as string)
+      setStatus(dataSend?.cargo?.data?.id as string)
     } else {
       setValue('cliente', '')
       setValue('descripcion', '')
@@ -114,15 +112,15 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
     resolver: yupResolver(schema)
   })
   const onSubmit = async (data: UpdatePedido) => {
-    console.log(data)
     if (nameModal === 'crear') {
       const res = await CreatePedido({
-        ...data,
-        user: status,
+        nombrePedido: data.nombrePedido,
+        descripcion: data.descripcion,
+        cliente: data.cliente,
         estacionFin: estacionesFinal,
-        estacionInicio: estacionesInicio
+        estacionInicio: estacionesInicio,
+        cargo: status!
       })
-      console.log(res)
       if (res.res) {
         toggle()
         reset()
@@ -140,7 +138,14 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
     if (nameModal === 'editar') {
       const res = await UpdatePedido({
         updatePedidoId: dataSend?.id!,
-        data: { ...data, user: status, estacionFin: estacionesFinal, estacionInicio: estacionesInicio }
+        data: {
+          nombrePedido: data.nombrePedido,
+          descripcion: data.descripcion,
+          cliente: data.cliente,
+          estacionFin: estacionesFinal,
+          estacionInicio: estacionesInicio,
+          cargo: status!
+        }
       })
       if (res.res) {
         refetch()
@@ -298,13 +303,13 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
                 displayEmpty: true,
                 onChange: e => handleStatusChange(e)
               }}
-              label='Usuarios'
+              label='Cargos'
             >
-              <MenuItem value=''>Usuario</MenuItem>
+              <MenuItem value=''>Cargos</MenuItem>
 
-              {dataUsuarios.map(item => (
+              {dataCargos.map(item => (
                 <MenuItem key={item.id} value={item.id!}>
-                  {item.attributes?.username}
+                  {item.attributes?.nombre}
                 </MenuItem>
               ))}
             </CustomTextField>

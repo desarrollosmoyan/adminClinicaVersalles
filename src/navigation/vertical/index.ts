@@ -6,27 +6,27 @@ const navigation = (): VerticalNavItemsType => {
     {
       title: 'Inicio',
       path: '/home',
-      icon: 'tabler:smart-home'
+      icon: 'iconoir:home'
     },
     {
       title: 'Estaciones',
       path: '/estaciones',
-      icon: 'tabler:smart-home'
+      icon: 'system-uicons:tag'
     },
     {
       title: 'Pedidos',
       path: '/pedidos',
-      icon: 'tabler:smart-home'
+      icon: 'icon-park-outline:transaction-order'
     },
     {
       title: 'Usuarios',
       path: '/usuarios',
-      icon: 'tabler:smart-home'
+      icon: 'tabler:users'
     },
     {
       title: 'Cargos',
       path: '/cargos',
-      icon: 'tabler:smart-home'
+      icon: 'material-symbols:work-outline'
     }
   ]
 }

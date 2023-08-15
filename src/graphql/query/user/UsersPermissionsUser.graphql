@@ -4,7 +4,13 @@ query UsersPermissionsUser($usersPermissionsUserId: ID) {
       attributes {
         username
         email
-        cargo
+        cargo {
+          data {
+            attributes {
+              nombre
+            }
+          }
+        }
         nombreCompleto
         Area
         pedidos {

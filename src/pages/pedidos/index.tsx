@@ -20,7 +20,7 @@ import Icon from 'src/@core/components/icon'
 
 // ** Services
 import { format } from 'date-fns'
-import { Maybe, PedidoEntity, UsersPermissionsUserEntityResponse } from 'src/generated/graphql'
+import { CargoEntityResponse, Maybe, PedidoEntity, UsersPermissionsUserEntityResponse } from 'src/generated/graphql'
 import { toast } from 'react-hot-toast'
 
 import TableHeader from 'src/components/shared/TableHeader'
@@ -42,6 +42,7 @@ export interface UpdatePedido {
   updatedAt?: string | undefined | null
   id?: string | undefined | null
   user?: Maybe<UsersPermissionsUserEntityResponse> | undefined
+  cargo?: CargoEntityResponse | undefined | null
 }
 
 const RowOptions = ({

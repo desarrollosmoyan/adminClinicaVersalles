@@ -1,44 +1,34 @@
 query Pedidos($pagination: PaginationArg) {
   pedidos(pagination: $pagination) {
-    data {
-      id
-      attributes {
-        nombrePedido
-        descripcion
-        cliente
-        fecha
-        hora
-        estacionInicio
-        estacionFin
-        fehcaInicio
-        fechaFin
-        cuantoTardoInicioFin
-        user {
-          data {
-            id
-            attributes {
-              username
-              email
-              provider
-              confirmed
-              blocked
-
-              cargo
-              nombreCompleto
-              Area
-
-              createdAt
-              updatedAt
-            }
-          }
-        }
-        createdAt
-        updatedAt
-      }
-    }
     meta {
       pagination {
         total
+      }
+    }
+    data {
+      id
+      attributes {
+        cargo {
+          data {
+            id
+            attributes {
+              nombre
+            }
+          }
+        }
+        nombrePedido
+        descripcion
+        cliente
+        hora
+        estacionInicio
+        estacionFin
+        cuantoTardoInicioFin
+        estado
+        fehcaInicio
+        fechaFin
+        fecha
+        createdAt
+        updatedAt
       }
     }
   }
