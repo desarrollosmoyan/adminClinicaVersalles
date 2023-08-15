@@ -22,6 +22,11 @@ const navigation = (): VerticalNavItemsType => {
       title: 'Usuarios',
       path: '/usuarios',
       icon: 'tabler:smart-home'
+    },
+    {
+      title: 'Cargos',
+      path: '/cargos',
+      icon: 'tabler:smart-home'
     }
   ]
 }

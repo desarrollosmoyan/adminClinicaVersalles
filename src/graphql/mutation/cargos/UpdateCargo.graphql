@@ -1,0 +1,7 @@
+mutation UpdateCargo($updateCargoId: ID!, $data: CargoInput!) {
+  updateCargo(id: $updateCargoId, data: $data) {
+    data {
+      id
+    }
+  }
+}

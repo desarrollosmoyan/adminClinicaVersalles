@@ -1,0 +1,7 @@
+mutation DeleteCargo($deleteCargoId: ID!) {
+  deleteCargo(id: $deleteCargoId) {
+    data {
+      id
+    }
+  }
+}

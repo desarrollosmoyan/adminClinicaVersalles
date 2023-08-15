@@ -1,0 +1,18 @@
+query Cargos($pagination: PaginationArg) {
+  cargos(pagination: $pagination) {
+    data {
+      id
+      attributes {
+        nombre
+        estado
+        createdAt
+        updatedAt
+      }
+    }
+    meta {
+      pagination {
+        total
+      }
+    }
+  }
+}

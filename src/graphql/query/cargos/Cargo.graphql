@@ -1,0 +1,14 @@
+query Cargo($cargoId: ID) {
+  cargo(id: $cargoId) {
+    data {
+      id
+      attributes {
+        nombre
+        estado
+        createdAt
+        updatedAt
+      }
+    }
+  }
+
+}

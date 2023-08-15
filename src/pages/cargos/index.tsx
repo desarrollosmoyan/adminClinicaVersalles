@@ -1,9 +1,6 @@
 // ** React Imports
 import { useState, MouseEvent, useCallback, Dispatch, SetStateAction } from 'react'
 
-// ** Next Imports
-import Link from 'next/link'
-
 // ** MUI Imports
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
@@ -13,51 +10,47 @@ import Divider from '@mui/material/Divider'
 import MenuItem from '@mui/material/MenuItem'
 import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
+import { Alert } from '@mui/material'
 
 import { DataGrid, GridColDef } from '@mui/x-data-grid'
 
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
 
+// ** MUI Graphql
+import { CargoEntity } from 'src/generated/graphql'
+import { useCargosServices } from 'src/service/useCargosServices'
+
 import TableHeader from 'src/components/shared/TableHeader'
 
-// ** Services
-import { useEstacionesServices } from 'src/service/useEstacionesServices'
-import AddEstacionesDrawer from 'src/views/apps/estaciones/AddEstacionesDrawer'
-
-import { format } from 'date-fns'
-
-import { EstacioneEntity } from 'src/generated/graphql'
-
 import { toast } from 'react-hot-toast'
+import AddCargosDrawer from 'src/views/apps/cargos/AddCargosDrawer'
 
 interface CellType {
   row: any
 }
 
-export interface UpdateEstacion {
-  codigoNFC?: string | undefined | null
-  createdAt?: string | undefined | null
-  nombre?: string | undefined | null
-  updatedAt?: string | undefined | null
+export interface UpdateCargos {
   id?: string | undefined | null
+  nombre?: string | undefined | null
+  estado?: boolean | undefined | null
 }
 
 const RowOptions = ({
   data,
   setIsModal,
-  setDataEstacion,
+  setDataCargo,
   refetch,
   setNameModal
 }: {
-  data: EstacioneEntity
+  data: CargoEntity
   setIsModal: Dispatch<SetStateAction<boolean>>
   setNameModal: Dispatch<SetStateAction<string>>
-  setDataEstacion: Dispatch<SetStateAction<UpdateEstacion | undefined>>
+  setDataCargo: Dispatch<SetStateAction<UpdateCargos | undefined>>
   refetch: () => void
 }) => {
   // ** Llamada a graphql
-  const { DeleteEstacion } = useEstacionesServices()
+  const { DeleteCargo } = useCargosServices()
 
   // ** State
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
@@ -70,14 +63,14 @@ const RowOptions = ({
   const handleRowOptionsClose = () => {
     setNameModal('editar')
     setIsModal(true)
-    setDataEstacion({ ...data.attributes!, id: data.id! })
+    setDataCargo({ ...data.attributes!, id: data.id! })
     setAnchorEl(null)
   }
 
   const handleDelete = async () => {
-    const res = await DeleteEstacion({ deleteEstacioneId: data.id! })
+    const res = await DeleteCargo({ deleteCargoId: data.id! })
     if (res.res) {
-      toast.success('Estación eliminada', {
+      toast.success('Cargo eliminada', {
         duration: 2000
       })
       refetch()
@@ -121,17 +114,19 @@ const RowOptions = ({
   )
 }
 
-const EstacionesPage = () => {
+const CargosPage = () => {
   // ** State
   const [value, setValue] = useState<string>('')
   const [isModal, setIsModal] = useState(false)
-  const [dataEstacion, setDataEstacion] = useState<UpdateEstacion | undefined>()
+  const [dataCargo, setDataCargo] = useState<UpdateCargos | undefined>()
   const [paginationModel, setPaginationModel] = useState({ page: 1, pageSize: 10 })
   const [nameModal, setNameModal] = useState('crear')
 
   // ** Llama de graphql
-  const { Estaciones } = useEstacionesServices()
-  const { dataEstaciones, refetch, loadingEstaciones } = Estaciones()
+  const { Cargos } = useCargosServices()
+  const { dataCargos, refetch, loadingCargos } = Cargos({
+    pagination: { pageSize: paginationModel.pageSize, page: paginationModel.page }
+  })
 
   // ** Columns
   const columns: GridColDef[] = [
@@ -149,8 +144,6 @@ const EstacionesPage = () => {
             <Box sx={{ display: 'flex', alignItems: 'flex-start', flexDirection: 'column' }}>
               <Typography
                 noWrap
-                component={Link}
-                href='/apps/user/view/account'
                 sx={{
                   fontWeight: 500,
                   textDecoration: 'none',
@@ -165,31 +158,25 @@ const EstacionesPage = () => {
         )
       }
     },
+
+    // EDITAR
     {
-      flex: 0.15,
-      field: 'codigoNFC',
-      minWidth: 170,
-      headerName: 'Codigo NFC',
+      flex: 0.25,
+      minWidth: 280,
+      field: 'estado',
+      headerName: 'Estado',
       renderCell: ({ row }: CellType) => {
+        const { estado } = row.attributes
+
         return (
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Typography noWrap sx={{ color: 'text.secondary', textTransform: 'capitalize' }}>
-              {row.attributes.codigoNFC}
-            </Typography>
+            {/* {renderClient(row)} */}
+            <Box sx={{ display: 'flex', alignItems: 'flex-start', flexDirection: 'column' }}>
+              <Alert icon={false} variant='outlined' severity={estado ? 'success' : 'error'}>
+                {estado ? 'Activo' : 'Inactivo'}
+              </Alert>
+            </Box>
           </Box>
-        )
-      }
-    },
-    {
-      flex: 0.15,
-      minWidth: 120,
-      headerName: 'Fecha de creacion',
-      field: 'createdAt',
-      renderCell: ({ row }: CellType) => {
-        return (
-          <Typography noWrap sx={{ fontWeight: 500, color: 'text.secondary', textTransform: 'capitalize' }}>
-            {format(new Date(row.attributes.createdAt), 'yyyy-MM-dd')}
-          </Typography>
         )
       }
     },
@@ -204,7 +191,7 @@ const EstacionesPage = () => {
         <RowOptions
           data={row}
           setIsModal={setIsModal}
-          setDataEstacion={setDataEstacion}
+          setDataCargo={setDataCargo}
           refetch={refetch}
           setNameModal={setNameModal}
         />
@@ -216,8 +203,9 @@ const EstacionesPage = () => {
     setValue(val)
   }, [])
 
-  const toggleAddEstacionesDrawer = () => {
+  const toggleAddCargosDrawer = () => {
     setIsModal(!isModal)
+    setNameModal('crear')
   }
 
   return (
@@ -228,14 +216,14 @@ const EstacionesPage = () => {
           <TableHeader
             value={value}
             handleFilter={handleFilter}
-            toggle={toggleAddEstacionesDrawer}
-            name='Agregar Estación'
+            toggle={toggleAddCargosDrawer}
+            name='Agregar Cargo'
             nameSearch='Buscar estaciones'
           />
           <DataGrid
             autoHeight
             rowHeight={62}
-            rows={dataEstaciones}
+            rows={dataCargos}
             columns={columns}
             disableRowSelectionOnClick
             pageSizeOptions={[10, 25, 50]}
@@ -244,7 +232,7 @@ const EstacionesPage = () => {
             localeText={{
               noRowsLabel: 'No hay información'
             }}
-            loading={loadingEstaciones}
+            loading={loadingCargos}
             componentsProps={{
               pagination: {
                 labelRowsPerPage: 'Filas por página'
@@ -254,10 +242,10 @@ const EstacionesPage = () => {
         </Card>
       </Grid>
 
-      <AddEstacionesDrawer
+      <AddCargosDrawer
         open={isModal}
-        toggle={toggleAddEstacionesDrawer}
-        dataEstacion={dataEstacion}
+        toggle={toggleAddCargosDrawer}
+        data={dataCargo}
         refetch={refetch}
         nameModal={nameModal}
       />
@@ -265,4 +253,4 @@ const EstacionesPage = () => {
   )
 }
 
-export default EstacionesPage
+export default CargosPage

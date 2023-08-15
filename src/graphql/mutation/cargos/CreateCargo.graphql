@@ -1,0 +1,7 @@
+mutation CreateCargo($data: CargoInput!) {
+  createCargo(data: $data) {
+    data {
+      id
+    }
+  }
+}
