@@ -85,8 +85,8 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
   const { dataCargos } = Cargos({
     pagination: { pageSize: 10, page: 1 }
   })
-
   useEffect(() => {
+    console.log()
     if (nameModal === 'editar') {
       setValue('cliente', dataSend?.cliente!)
       setValue('identificacion', dataSend?.identificacion!)
@@ -104,7 +104,7 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
       setStatus('')
       setTipoIdentificacion('')
     }
-  }, [nameModal])
+  }, [nameModal, dataSend?.id])
 
   // ** Hooks
   const {
@@ -320,25 +320,6 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
             )}
           />
           {/* ==== */}
-          {/* DOCUMENTO */}
-          <Controller
-            name='identificacion'
-            control={control}
-            rules={{ required: true }}
-            render={({ field: { value, onChange } }) => (
-              <CustomTextField
-                fullWidth
-                value={value}
-                sx={{ mb: 4 }}
-                label='Numero de documento'
-                onChange={onChange}
-                placeholder='Ingrese el numero de documento'
-                error={Boolean(errors.identificacion)}
-                {...(errors.identificacion && { helperText: errors.identificacion.message })}
-              />
-            )}
-          />
-          {/* ==== */}
 
           {/*TIPO IDENTIFICACION*/}
           <Grid>
@@ -364,6 +345,26 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
             </CustomTextField>
           </Grid>
           {/* ===== */}
+          {/* DOCUMENTO */}
+          <Controller
+            name='identificacion'
+            control={control}
+            rules={{ required: true }}
+            render={({ field: { value, onChange } }) => (
+              <CustomTextField
+                fullWidth
+                value={value}
+                sx={{ mb: 4 }}
+                label='Numero de documento'
+                onChange={onChange}
+                placeholder='Ingrese el numero de documento'
+                error={Boolean(errors.identificacion)}
+                {...(errors.identificacion && { helperText: errors.identificacion.message })}
+              />
+            )}
+          />
+          {/* ==== */}
+
           {/* OBSERVACIONES */}
           <Controller
             name='descripcion'
