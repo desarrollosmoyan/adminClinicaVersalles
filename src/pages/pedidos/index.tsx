@@ -40,6 +40,8 @@ export interface UpdatePedido {
   estacionInicio?: string | undefined | null
   nombrePedido?: string | undefined | null
   updatedAt?: string | undefined | null
+  identificacion?: string | undefined | null
+  tipoIdentificacion?: string | undefined | null
   id?: string | undefined | null
   user?: Maybe<UsersPermissionsUserEntityResponse> | undefined
   cargo?: CargoEntityResponse | undefined | null
@@ -208,21 +210,6 @@ const PedidosPage = () => {
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Typography noWrap sx={{ color: 'text.secondary', textTransform: 'capitalize' }}>
               {row.attributes.estacionFin}
-            </Typography>
-          </Box>
-        )
-      }
-    },
-    {
-      flex: 0.15,
-      field: 'nombrePedido',
-      minWidth: 170,
-      headerName: 'Nombre Pedido',
-      renderCell: ({ row }: CellType) => {
-        return (
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Typography noWrap sx={{ color: 'text.secondary', textTransform: 'capitalize' }}>
-              {row.attributes.nombrePedido}
             </Typography>
           </Box>
         )

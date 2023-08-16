@@ -63,7 +63,7 @@ const EditarUsuarioPage = () => {
   useEffect(() => {
     if (!loadingUsuario) {
       setEstaciones(dataUsuario?.attributes?.Area! || '')
-      setValue('cargo', dataUsuario?.attributes?.cargo!)
+      setValue('cargo', dataUsuario?.attributes?.cargo?.data?.attributes?.nombre!)
       setValue('email', dataUsuario?.attributes?.email!)
       setValue('nombreCompleto', dataUsuario?.attributes?.nombreCompleto!)
       setValue('username', dataUsuario?.attributes?.username!)

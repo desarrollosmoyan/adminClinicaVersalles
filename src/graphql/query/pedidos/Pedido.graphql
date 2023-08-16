@@ -25,6 +25,8 @@ query Pedido($pedidoId: ID) {
         fecha
         createdAt
         updatedAt
+        tipoIdentificacion
+        identificacion
       }
     }
   }

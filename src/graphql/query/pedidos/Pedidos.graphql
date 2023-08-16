@@ -23,6 +23,8 @@ query Pedidos($pagination: PaginationArg) {
         estacionInicio
         estacionFin
         cuantoTardoInicioFin
+        tipoIdentificacion
+        identificacion
         estado
         fehcaInicio
         fechaFin

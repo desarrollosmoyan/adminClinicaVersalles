@@ -48,7 +48,9 @@ const Header = styled(Box)<BoxProps>(({ theme }) => ({
 const schema = yup.object().shape({
   cliente: yup.string().required(),
   descripcion: yup.string().required(),
-  nombrePedido: yup.string().required()
+
+  // nombrePedido: yup.string().required(),
+  identificacion: yup.number().required()
 })
 
 const defaultValues = {
@@ -56,14 +58,15 @@ const defaultValues = {
   descripcion: '',
   estacionFin: '',
   estacionInicio: '',
-  nombrePedido: ''
+  nombrePedido: '',
+  identificacion: ''
 }
 
 const SidebarAddUser = (props: SidebarAddUserType) => {
   const [status, setStatus] = useState<string>('')
   const [estacionesInicio, setEstacionesInicio] = useState('')
   const [estacionesFinal, setEstacionesFinal] = useState('')
-  const [identificacion, setIdentificacion] = useState('')
+  const [tipoIdentificacion, setTipoIdentificacion] = useState('')
 
   const handleStatusChange = useCallback((e: SelectChangeEvent<unknown>) => {
     setStatus(e.target.value as string)
@@ -86,18 +89,20 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
   useEffect(() => {
     if (nameModal === 'editar') {
       setValue('cliente', dataSend?.cliente!)
+      setValue('identificacion', dataSend?.identificacion!)
       setValue('descripcion', dataSend?.descripcion!)
       setEstacionesInicio(dataSend?.estacionInicio!)
       setEstacionesFinal(dataSend?.estacionFin!)
-      setValue('nombrePedido', dataSend?.nombrePedido!)
       setStatus(dataSend?.cargo?.data?.id as string)
+      setTipoIdentificacion(dataSend?.tipoIdentificacion!)
     } else {
-      setValue('cliente', '')
+      setValue('cliente', ''), setValue('identificacion', '')
       setValue('descripcion', '')
       setEstacionesFinal('')
       setEstacionesInicio('')
       setValue('nombrePedido', '')
       setStatus('')
+      setTipoIdentificacion('')
     }
   }, [nameModal])
 
@@ -116,12 +121,13 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
   const onSubmit = async (data: UpdatePedido) => {
     if (nameModal === 'crear') {
       const res = await CreatePedido({
-        nombrePedido: data.nombrePedido,
         descripcion: data.descripcion,
         cliente: data.cliente,
         estacionFin: estacionesFinal,
         estacionInicio: estacionesInicio,
-        cargo: status!
+        cargo: status!,
+        tipoIdentificacion: tipoIdentificacion,
+        identificacion: `${data.identificacion}`
       })
       if (res.res) {
         toggle()
@@ -141,12 +147,13 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
       const res = await UpdatePedido({
         updatePedidoId: dataSend?.id!,
         data: {
-          nombrePedido: data.nombrePedido,
           descripcion: data.descripcion,
           cliente: data.cliente,
           estacionFin: estacionesFinal,
           estacionInicio: estacionesInicio,
-          cargo: status!
+          cargo: status!,
+          tipoIdentificacion: tipoIdentificacion,
+          identificacion: `${data.identificacion}`
         }
       })
       if (res.res) {
@@ -313,8 +320,27 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
             )}
           />
           {/* ==== */}
+          {/* DOCUMENTO */}
+          <Controller
+            name='identificacion'
+            control={control}
+            rules={{ required: true }}
+            render={({ field: { value, onChange } }) => (
+              <CustomTextField
+                fullWidth
+                value={value}
+                sx={{ mb: 4 }}
+                label='Numero de documento'
+                onChange={onChange}
+                placeholder='Ingrese el numero de documento'
+                error={Boolean(errors.identificacion)}
+                {...(errors.identificacion && { helperText: errors.identificacion.message })}
+              />
+            )}
+          />
+          {/* ==== */}
 
-          {/* IDENTIFICACION*/}
+          {/*TIPO IDENTIFICACION*/}
           <Grid>
             <CustomTextField
               select
@@ -322,9 +348,9 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
               sx={{ mb: 4 }}
               defaultValue=''
               SelectProps={{
-                value: identificacion,
+                value: tipoIdentificacion,
                 displayEmpty: true,
-                onChange: e => setIdentificacion(e.target.value as string)
+                onChange: e => setTipoIdentificacion(e.target.value as string)
               }}
               label='Tipo de documento'
             >
@@ -338,23 +364,7 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
             </CustomTextField>
           </Grid>
           {/* ===== */}
-          {/* <Controller
-            name='nombrePedido'
-            control={control}
-            rules={{ required: true }}
-            render={({ field: { value, onChange } }) => (
-              <CustomTextField
-                fullWidth
-                value={value}
-                sx={{ mb: 4 }}
-                label='Nombre Pedido'
-                onChange={onChange}
-                placeholder='Ingrese un nombre pedido'
-                error={Boolean(errors.nombrePedido)}
-                {...(errors.nombrePedido && { helperText: errors.nombrePedido.message })}
-              />
-            )}
-          /> */}
+          {/* OBSERVACIONES */}
           <Controller
             name='descripcion'
             control={control}
@@ -362,16 +372,20 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
             render={({ field: { value, onChange } }) => (
               <CustomTextField
                 fullWidth
+                multiline
+                rows={4}
                 value={value}
                 sx={{ mb: 4 }}
-                label='Descripción'
+                label='Observación'
                 onChange={onChange}
-                placeholder='Ingrese una descripción'
+                placeholder='Ingrese las observaciones'
                 error={Boolean(errors.descripcion)}
                 {...(errors.descripcion && { helperText: errors.descripcion.message })}
               />
             )}
           />
+
+          {/* ===== */}
 
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Button type='submit' variant='contained' sx={{ mr: 3 }}>
