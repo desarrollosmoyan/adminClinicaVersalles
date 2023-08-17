@@ -22,6 +22,7 @@ import CustomTextField from 'src/@core/components/mui/text-field'
 import { useEstacionesServices } from 'src/service/useEstacionesServices'
 import { useUsuariosServices } from 'src/service/useUsuariosServices'
 import { toast } from 'react-hot-toast'
+import { useCargosServices } from 'src/service/useCargosServices'
 
 const Header = styled(Box)<BoxProps>(({ theme }) => ({
   display: 'flex',
@@ -31,14 +32,12 @@ const Header = styled(Box)<BoxProps>(({ theme }) => ({
 }))
 
 const schema = yup.object().shape({
-  cargo: yup.string().required(),
   email: yup.string().required(),
   nombreCompleto: yup.string().required(),
   username: yup.string().required()
 })
 
 const defaultValues = {
-  cargo: '',
   email: '',
   nombreCompleto: '',
   username: ''
@@ -46,6 +45,7 @@ const defaultValues = {
 
 const EditarUsuarioPage = () => {
   const [estaciones, setEstaciones] = useState('')
+  const [valueCargo, setValueCargo] = useState('')
 
   // * Router
   const {
@@ -58,12 +58,17 @@ const EditarUsuarioPage = () => {
   const { dataEstaciones } = Estaciones()
   const { UpdateUsuario, Usuario } = useUsuariosServices()
   const { dataUsuario, loadingUsuario } = Usuario({ usersPermissionsUserId: id as string })
+  const { Cargos } = useCargosServices()
+  const { dataCargos } = Cargos({
+    pagination: { pageSize: 10, page: 1 }
+  })
+  console.log(dataUsuario)
 
   //** Useeffect for default values
   useEffect(() => {
     if (!loadingUsuario) {
       setEstaciones(dataUsuario?.attributes?.Area! || '')
-      setValue('cargo', dataUsuario?.attributes?.cargo?.data?.attributes?.nombre!)
+      setValueCargo(dataUsuario?.attributes?.cargo?.data?.id! || '')
       setValue('email', dataUsuario?.attributes?.email!)
       setValue('nombreCompleto', dataUsuario?.attributes?.nombreCompleto!)
       setValue('username', dataUsuario?.attributes?.username!)
@@ -84,7 +89,7 @@ const EditarUsuarioPage = () => {
   })
   const onSubmit = async (dataUsuario: typeof defaultValues) => {
     const res = await UpdateUsuario({
-      data: { ...dataUsuario, role: '1', Area: estaciones },
+      data: { ...dataUsuario, role: '1', Area: estaciones, cargo: valueCargo },
       updateUsersPermissionsUserId: id as string
     })
     if (res.res) {
@@ -130,7 +135,30 @@ const EditarUsuarioPage = () => {
               ))}
             </CustomTextField>
           </Grid>
-          <Controller
+          {/* Cargos */}
+          <Grid>
+            <CustomTextField
+              select
+              fullWidth
+              sx={{ mb: 4 }}
+              defaultValue={valueCargo}
+              SelectProps={{
+                value: valueCargo,
+                displayEmpty: true,
+                onChange: e => setValueCargo(e.target.value as string)
+              }}
+              label='Cargo'
+            >
+              <MenuItem value=''>Cargo</MenuItem>
+
+              {dataCargos.map(item => (
+                <MenuItem key={item?.id!} value={item?.id!}>
+                  {item.attributes?.nombre}
+                </MenuItem>
+              ))}
+            </CustomTextField>
+          </Grid>
+          {/* <Controller
             name='cargo'
             control={control}
             rules={{ required: true }}
@@ -146,7 +174,7 @@ const EditarUsuarioPage = () => {
                 {...(errors.cargo && { helperText: errors.cargo.message })}
               />
             )}
-          />
+          /> */}
           <Controller
             name='email'
             control={control}

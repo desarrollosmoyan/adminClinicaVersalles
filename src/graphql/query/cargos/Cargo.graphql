@@ -8,6 +8,7 @@ query Cargo($cargoId: ID) {
         createdAt
         updatedAt
       }
+      id
     }
   }
 

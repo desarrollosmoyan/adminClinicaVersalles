@@ -10,6 +10,7 @@ query UsersPermissionsUser($usersPermissionsUserId: ID) {
             attributes {
               nombre
             }
+            id
           }
         }
         nombreCompleto

@@ -22,6 +22,7 @@ import CustomTextField from 'src/@core/components/mui/text-field'
 import { useEstacionesServices } from 'src/service/useEstacionesServices'
 import { useUsuariosServices } from 'src/service/useUsuariosServices'
 import { toast } from 'react-hot-toast'
+import { useCargosServices } from 'src/service/useCargosServices'
 
 const Header = styled(Box)<BoxProps>(({ theme }) => ({
   display: 'flex',
@@ -31,7 +32,7 @@ const Header = styled(Box)<BoxProps>(({ theme }) => ({
 }))
 
 const schema = yup.object().shape({
-  cargo: yup.string().required(),
+  // cargo: yup.string().required(),
   email: yup.string().required(),
   nombreCompleto: yup.string().required(),
   username: yup.string().required(),
@@ -39,7 +40,7 @@ const schema = yup.object().shape({
 })
 
 const defaultValues = {
-  cargo: '',
+  // cargo: '',
   email: '',
   nombreCompleto: '',
   username: '',
@@ -48,6 +49,7 @@ const defaultValues = {
 
 const CreateUsuarioPage = () => {
   const [estaciones, setEstaciones] = useState('')
+  const [valueCargo, setValueCargo] = useState('')
 
   // * Router
   const { push } = useRouter()
@@ -56,11 +58,16 @@ const CreateUsuarioPage = () => {
   const { Estaciones } = useEstacionesServices()
   const { dataEstaciones } = Estaciones()
   const { CreateUsuario } = useUsuariosServices()
+  const { Cargos } = useCargosServices()
+  const { dataCargos } = Cargos({
+    pagination: { pageSize: 10, page: 1 }
+  })
 
   // ** Hooks
   const {
     reset,
     control,
+
     handleSubmit,
     formState: { errors }
   } = useForm({
@@ -69,7 +76,7 @@ const CreateUsuarioPage = () => {
     resolver: yupResolver(schema)
   })
   const onSubmit = async (dataUsuario: typeof defaultValues) => {
-    const res = await CreateUsuario({ ...dataUsuario, role: '1', Area: estaciones })
+    const res = await CreateUsuario({ ...dataUsuario, role: '1', Area: estaciones, cargo: valueCargo })
     if (res.res) {
       reset()
       toast.success('Usuario creado', {
@@ -91,6 +98,7 @@ const CreateUsuarioPage = () => {
 
       <Box sx={{ p: theme => theme.spacing(0, 6, 6) }}>
         <form onSubmit={handleSubmit(onSubmit)}>
+          {/* Area */}
           <Grid>
             <CustomTextField
               select
@@ -102,9 +110,9 @@ const CreateUsuarioPage = () => {
                 displayEmpty: true,
                 onChange: e => setEstaciones(e.target.value as string)
               }}
-              label='Areas'
+              label='Area'
             >
-              <MenuItem value=''>Areas</MenuItem>
+              <MenuItem value=''>Area</MenuItem>
 
               {dataEstaciones.map(item => (
                 <MenuItem key={item?.id!} value={item?.attributes?.nombre!}>
@@ -113,23 +121,30 @@ const CreateUsuarioPage = () => {
               ))}
             </CustomTextField>
           </Grid>
-          <Controller
-            name='cargo'
-            control={control}
-            rules={{ required: true }}
-            render={({ field: { value, onChange } }) => (
-              <CustomTextField
-                fullWidth
-                value={value}
-                sx={{ mb: 4 }}
-                label='Cargo'
-                onChange={onChange}
-                placeholder='Ingrese un cargo'
-                error={Boolean(errors.cargo)}
-                {...(errors.cargo && { helperText: errors.cargo.message })}
-              />
-            )}
-          />
+          {/* Cargos */}
+          <Grid>
+            <CustomTextField
+              select
+              fullWidth
+              sx={{ mb: 4 }}
+              defaultValue={valueCargo}
+              SelectProps={{
+                value: valueCargo,
+                displayEmpty: true,
+                onChange: e => setValueCargo(e.target.value as string)
+              }}
+              label='Cargo'
+            >
+              <MenuItem value=''>Cargo</MenuItem>
+
+              {dataCargos.map(item => (
+                <MenuItem key={item?.id!} value={item?.id!}>
+                  {item.attributes?.nombre}
+                </MenuItem>
+              ))}
+            </CustomTextField>
+          </Grid>
+
           <Controller
             name='email'
             control={control}
