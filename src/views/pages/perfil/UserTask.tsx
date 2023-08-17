@@ -12,7 +12,7 @@ import { PedidoEntity } from 'src/generated/graphql'
 
 // ** Moment Imports
 
-import { Divider } from '@mui/material'
+import { Alert, Divider } from '@mui/material'
 
 interface Props {
   task: PedidoEntity[]
@@ -70,6 +70,26 @@ const UserTask = ({ task }: Props) => {
             <Typography noWrap sx={{ color: 'text.secondary', textTransform: 'capitalize' }}>
               {row.attributes.identificacion || ''}
             </Typography>
+          </Box>
+        )
+      }
+    },
+    {
+      flex: 0.25,
+      minWidth: 280,
+      field: 'finalizado',
+      headerName: 'Finalizado',
+      renderCell: ({ row }: CellType) => {
+        const { finalizado } = row.attributes
+
+        return (
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            {/* {renderClient(row)} */}
+            <Box sx={{ display: 'flex', alignItems: 'flex-start', flexDirection: 'column' }}>
+              <Alert icon={false} variant='outlined' severity={finalizado ? 'success' : 'error'}>
+                {finalizado ? 'Finalizado' : 'No Finalizado'}
+              </Alert>
+            </Box>
           </Box>
         )
       }

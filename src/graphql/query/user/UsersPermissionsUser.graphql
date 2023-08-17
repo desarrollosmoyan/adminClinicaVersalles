@@ -31,6 +31,7 @@ query UsersPermissionsUser($usersPermissionsUserId: ID) {
               estado
               identificacion
               tipoIdentificacion
+              finalizado
             }
             id
           }

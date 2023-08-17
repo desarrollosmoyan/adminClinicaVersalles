@@ -1571,7 +1571,7 @@ export type UsersPermissionsUserQueryVariables = Exact<{
 }>;
 
 
-export type UsersPermissionsUserQuery = { __typename?: 'Query', usersPermissionsUser?: { __typename?: 'UsersPermissionsUserEntityResponse', data?: { __typename?: 'UsersPermissionsUserEntity', attributes?: { __typename?: 'UsersPermissionsUser', username: string, enlinea?: boolean | null, email: string, nombreCompleto?: string | null, Area?: string | null, cargo?: { __typename?: 'CargoEntityResponse', data?: { __typename?: 'CargoEntity', id?: string | null, attributes?: { __typename?: 'Cargo', nombre?: string | null } | null } | null } | null, pedidos?: { __typename?: 'PedidoRelationResponseCollection', data: Array<{ __typename?: 'PedidoEntity', id?: string | null, attributes?: { __typename?: 'Pedido', nombrePedido?: string | null, descripcion?: string | null, cliente?: string | null, fecha?: string | null, hora?: any | null, estacionInicio?: string | null, estacionFin?: string | null, fehcaInicio?: string | null, fechaFin?: string | null, cuantoTardoInicioFin?: string | null, estado?: boolean | null, identificacion?: string | null, tipoIdentificacion?: string | null } | null }> } | null, turnos?: { __typename?: 'TurnoRelationResponseCollection', data: Array<{ __typename?: 'TurnoEntity', attributes?: { __typename?: 'Turno', fin?: any | null, inicio?: any | null, nombre?: string | null } | null }> } | null } | null } | null } | null };
+export type UsersPermissionsUserQuery = { __typename?: 'Query', usersPermissionsUser?: { __typename?: 'UsersPermissionsUserEntityResponse', data?: { __typename?: 'UsersPermissionsUserEntity', attributes?: { __typename?: 'UsersPermissionsUser', username: string, enlinea?: boolean | null, email: string, nombreCompleto?: string | null, Area?: string | null, cargo?: { __typename?: 'CargoEntityResponse', data?: { __typename?: 'CargoEntity', id?: string | null, attributes?: { __typename?: 'Cargo', nombre?: string | null } | null } | null } | null, pedidos?: { __typename?: 'PedidoRelationResponseCollection', data: Array<{ __typename?: 'PedidoEntity', id?: string | null, attributes?: { __typename?: 'Pedido', nombrePedido?: string | null, descripcion?: string | null, cliente?: string | null, fecha?: string | null, hora?: any | null, estacionInicio?: string | null, estacionFin?: string | null, fehcaInicio?: string | null, fechaFin?: string | null, cuantoTardoInicioFin?: string | null, estado?: boolean | null, identificacion?: string | null, tipoIdentificacion?: string | null, finalizado?: boolean | null } | null }> } | null, turnos?: { __typename?: 'TurnoRelationResponseCollection', data: Array<{ __typename?: 'TurnoEntity', attributes?: { __typename?: 'Turno', fin?: any | null, inicio?: any | null, nombre?: string | null } | null }> } | null } | null } | null } | null };
 
 export type UsersPermissionsUsersQueryVariables = Exact<{
   pagination?: InputMaybe<PaginationArg>;
@@ -2354,6 +2354,7 @@ export const UsersPermissionsUserDocument = gql`
               estado
               identificacion
               tipoIdentificacion
+              finalizado
             }
             id
           }
