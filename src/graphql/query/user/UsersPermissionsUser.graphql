@@ -28,7 +28,10 @@ query UsersPermissionsUser($usersPermissionsUserId: ID) {
               fechaFin
               cuantoTardoInicioFin
               estado
+              identificacion
+              tipoIdentificacion
             }
+            id
           }
         }
         turnos {
