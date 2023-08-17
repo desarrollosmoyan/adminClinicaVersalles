@@ -8,17 +8,26 @@ import CustomTextField from 'src/@core/components/mui/text-field'
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
 
+import { utils, writeFile } from 'xlsx'
+
 interface TableHeaderProps {
   value: string
   toggle: () => void
   handleFilter: (val: string) => void
   name: string
   nameSearch: string
+  data?: any
 }
 
 const TableHeader = (props: TableHeaderProps) => {
   // ** Props
-  const { handleFilter, toggle, value, name, nameSearch } = props
+  const { handleFilter, toggle, value, name, nameSearch, data } = props
+  const handleExport = () => {
+    const wb = utils.book_new()
+    const ws = utils.json_to_sheet(data)
+    utils.book_append_sheet(wb, ws, 'Hoja 1')
+    writeFile(wb, 'pedidos.xlsx')
+  }
 
   return (
     <Box
@@ -33,7 +42,18 @@ const TableHeader = (props: TableHeaderProps) => {
         justifyContent: 'space-between'
       }}
     >
-      <Button color='secondary' variant='tonal' startIcon={<Icon icon='tabler:upload' />}>
+      <Button
+        onClick={() => {
+          if (data) {
+            handleExport()
+
+            return
+          }
+        }}
+        color='primary'
+        variant='tonal'
+        startIcon={<Icon icon='tabler:upload' />}
+      >
         Exportar
       </Button>
       <Box sx={{ rowGap: 2, display: 'flex', flexWrap: 'wrap', alignItems: 'center' }}>

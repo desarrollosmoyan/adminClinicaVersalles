@@ -73,8 +73,10 @@
     "react-popper": "2.3.0",
     "react-redux": "8.0.5",
     "recharts": "2.5.0",
+    "sheetjs-style": "^0.15.8",
     "stylis": "4.1.4",
     "stylis-plugin-rtl": "2.1.1",
+    "xlsx": "^0.18.5",
     "yup": "1.1.1",
     "zustand": "^4.3.9"
   },

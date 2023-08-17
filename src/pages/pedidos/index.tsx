@@ -1,5 +1,5 @@
 // ** React Imports
-import { useState, MouseEvent, useCallback, Dispatch, SetStateAction } from 'react'
+import { useState, MouseEvent, useCallback, Dispatch, SetStateAction, useMemo } from 'react'
 
 // ** Next Imports
 
@@ -19,7 +19,6 @@ import { DataGrid, GridColDef } from '@mui/x-data-grid'
 import Icon from 'src/@core/components/icon'
 
 // ** Services
-import { format } from 'date-fns'
 import { CargoEntityResponse, Maybe, PedidoEntity, UsersPermissionsUserEntityResponse } from 'src/generated/graphql'
 import { toast } from 'react-hot-toast'
 
@@ -27,6 +26,7 @@ import TableHeader from 'src/components/shared/TableHeader'
 import AddUserDrawer from 'src/views/apps/pedidos/AddUserDrawer'
 import { usePedidosServices } from 'src/service/usePedidosServices'
 import Link from 'next/link'
+import { format } from 'date-fns'
 
 interface CellType {
   row: any
@@ -257,6 +257,26 @@ const PedidosPage = () => {
     setNameModal('crear')
   }
 
+  const dataExport = useMemo(
+    () =>
+      dataPedidos?.map(pedido => {
+        return {
+          cliente: pedido?.attributes?.cliente,
+          descripcion: pedido?.attributes?.descripcion,
+          estacionInicio: pedido?.attributes?.estacionInicio,
+          estacionFin: pedido?.attributes?.estacionFin,
+          fechaInicio: pedido?.attributes?.fehcaInicio!,
+          fechaFin: pedido?.attributes?.fechaFin!,
+          fecha: pedido?.attributes?.fecha!,
+          cargo: pedido?.attributes?.cargo?.data?.attributes?.nombre,
+          cuantoTardo: pedido?.attributes?.cuantoTardoInicioFin,
+          tipoIdentificacion: pedido?.attributes?.tipoIdentificacion,
+          identificacion: pedido?.attributes?.identificacion
+        }
+      }),
+    [loadingPedidos]
+  )
+
   return (
     <Grid container spacing={6.5}>
       <Grid item xs={12}>
@@ -268,6 +288,7 @@ const PedidosPage = () => {
             toggle={toggleAddUserDrawer}
             name='Agregar Pedido'
             nameSearch='Buscar pedidos'
+            data={dataExport}
           />
           <DataGrid
             autoHeight
