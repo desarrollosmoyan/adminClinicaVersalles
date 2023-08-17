@@ -3,6 +3,7 @@ query UsersPermissionsUsers($pagination: PaginationArg) {
     data {
       attributes {
         username
+        enlinea
         email
         provider
         confirmed

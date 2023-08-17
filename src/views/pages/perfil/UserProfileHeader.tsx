@@ -72,6 +72,16 @@ const UserProfileHeader = ({ user }: Props) => {
               }}
             >
               <Box sx={{ mr: 4, display: 'flex', alignItems: 'center', '& svg': { mr: 1.5, color: 'text.secondary' } }}>
+                <Icon
+                  color={`${user?.enlinea ? 'green' : 'red'}`}
+                  fontSize='1.25rem'
+                  icon='heroicons-outline:status-online'
+                />
+                <Typography sx={{ color: `${user?.enlinea ? 'green' : 'red'}` }}>
+                  {user?.enlinea ? 'En linea' : 'Desconectado'}
+                </Typography>
+              </Box>
+              <Box sx={{ mr: 4, display: 'flex', alignItems: 'center', '& svg': { mr: 1.5, color: 'text.secondary' } }}>
                 <Icon fontSize='1.25rem' icon='tabler:message' />
                 <Typography sx={{ color: 'text.secondary' }}>{user?.email!}</Typography>
               </Box>
@@ -79,9 +89,10 @@ const UserProfileHeader = ({ user }: Props) => {
                 <Icon fontSize='1.25rem' icon='tabler:user' />
                 <Typography sx={{ color: 'text.secondary' }}>{user?.username!}</Typography>
               </Box>
+
               <Box sx={{ display: 'flex', alignItems: 'center', '& svg': { mr: 1.5, color: 'text.secondary' } }}>
                 <Icon fontSize='1.25rem' icon={designationIcon} />
-                <Typography sx={{ color: 'text.secondary' }}> {user?.cargo!}</Typography>
+                <Typography sx={{ color: 'text.secondary' }}> {user?.cargo?.data?.attributes?.nombre}</Typography>
               </Box>
             </Box>
           </Box>

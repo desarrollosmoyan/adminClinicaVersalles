@@ -31,6 +31,11 @@ query Pedidos($pagination: PaginationArg) {
         fecha
         createdAt
         updatedAt
+        user {
+          data {
+            id
+          }
+        }
       }
     }
   }

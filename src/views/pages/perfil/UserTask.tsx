@@ -29,11 +29,11 @@ const UserTask = ({ task }: Props) => {
               <Grid key={item.id} item xs={12} md={6} lg={4}>
                 <Card>
                   <CardContent>
-                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    {/* <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                       <Box sx={{ display: 'flex', alignItems: 'center' }}>
                         <Typography variant='h5'>{item.attributes?.nombrePedido}</Typography>
                       </Box>
-                    </Box>
+                    </Box> */}
                     <Typography sx={{ my: 4, color: 'text.secondary' }}>{item.attributes?.descripcion}</Typography>
                     <Box sx={{ gap: 2, display: 'flex', flexWrap: 'wrap', alignItems: 'center' }}></Box>
                     <Box

@@ -50,7 +50,6 @@ export type Cargo = {
   createdAt?: Maybe<Scalars['DateTime']['output']>;
   estado?: Maybe<Scalars['Boolean']['output']>;
   nombre?: Maybe<Scalars['String']['output']>;
-  pedido?: Maybe<PedidoEntityResponse>;
   updatedAt?: Maybe<Scalars['DateTime']['output']>;
   user?: Maybe<UsersPermissionsUserEntityResponse>;
 };
@@ -80,7 +79,6 @@ export type CargoFiltersInput = {
   nombre?: InputMaybe<StringFilterInput>;
   not?: InputMaybe<CargoFiltersInput>;
   or?: InputMaybe<Array<InputMaybe<CargoFiltersInput>>>;
-  pedido?: InputMaybe<PedidoFiltersInput>;
   updatedAt?: InputMaybe<DateTimeFilterInput>;
   user?: InputMaybe<UsersPermissionsUserFiltersInput>;
 };
@@ -88,7 +86,6 @@ export type CargoFiltersInput = {
 export type CargoInput = {
   estado?: InputMaybe<Scalars['Boolean']['input']>;
   nombre?: InputMaybe<Scalars['String']['input']>;
-  pedido?: InputMaybe<Scalars['ID']['input']>;
   user?: InputMaybe<Scalars['ID']['input']>;
 };
 
@@ -646,6 +643,7 @@ export type Pedido = {
   fecha?: Maybe<Scalars['String']['output']>;
   fechaFin?: Maybe<Scalars['String']['output']>;
   fehcaInicio?: Maybe<Scalars['String']['output']>;
+  finalizado?: Maybe<Scalars['Boolean']['output']>;
   hora?: Maybe<Scalars['Time']['output']>;
   identificacion?: Maybe<Scalars['String']['output']>;
   nombrePedido?: Maybe<Scalars['String']['output']>;
@@ -685,6 +683,7 @@ export type PedidoFiltersInput = {
   fecha?: InputMaybe<StringFilterInput>;
   fechaFin?: InputMaybe<StringFilterInput>;
   fehcaInicio?: InputMaybe<StringFilterInput>;
+  finalizado?: InputMaybe<BooleanFilterInput>;
   hora?: InputMaybe<TimeFilterInput>;
   id?: InputMaybe<IdFilterInput>;
   identificacion?: InputMaybe<StringFilterInput>;
@@ -708,6 +707,7 @@ export type PedidoInput = {
   fecha?: InputMaybe<Scalars['String']['input']>;
   fechaFin?: InputMaybe<Scalars['String']['input']>;
   fehcaInicio?: InputMaybe<Scalars['String']['input']>;
+  finalizado?: InputMaybe<Scalars['Boolean']['input']>;
   hora?: InputMaybe<Scalars['Time']['input']>;
   identificacion?: InputMaybe<Scalars['String']['input']>;
   nombrePedido?: InputMaybe<Scalars['String']['input']>;
@@ -1346,6 +1346,7 @@ export type UsersPermissionsUser = {
   provider?: Maybe<Scalars['String']['output']>;
   role?: Maybe<UsersPermissionsRoleEntityResponse>;
   turnos?: Maybe<TurnoRelationResponseCollection>;
+  ubicacionActual?: Maybe<Scalars['String']['output']>;
   ubicacione?: Maybe<UbicacioneEntityResponse>;
   updatedAt?: Maybe<Scalars['DateTime']['output']>;
   username: Scalars['String']['output'];
@@ -1403,6 +1404,7 @@ export type UsersPermissionsUserFiltersInput = {
   resetPasswordToken?: InputMaybe<StringFilterInput>;
   role?: InputMaybe<UsersPermissionsRoleFiltersInput>;
   turnos?: InputMaybe<TurnoFiltersInput>;
+  ubicacionActual?: InputMaybe<StringFilterInput>;
   ubicacione?: InputMaybe<UbicacioneFiltersInput>;
   updatedAt?: InputMaybe<DateTimeFilterInput>;
   username?: InputMaybe<StringFilterInput>;
@@ -1424,6 +1426,7 @@ export type UsersPermissionsUserInput = {
   resetPasswordToken?: InputMaybe<Scalars['String']['input']>;
   role?: InputMaybe<Scalars['ID']['input']>;
   turnos?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  ubicacionActual?: InputMaybe<Scalars['String']['input']>;
   ubicacione?: InputMaybe<Scalars['ID']['input']>;
   username?: InputMaybe<Scalars['String']['input']>;
 };
@@ -1561,21 +1564,21 @@ export type PedidosQueryVariables = Exact<{
 }>;
 
 
-export type PedidosQuery = { __typename?: 'Query', pedidos?: { __typename?: 'PedidoEntityResponseCollection', meta: { __typename?: 'ResponseCollectionMeta', pagination: { __typename?: 'Pagination', total: number } }, data: Array<{ __typename?: 'PedidoEntity', id?: string | null, attributes?: { __typename?: 'Pedido', nombrePedido?: string | null, descripcion?: string | null, cliente?: string | null, hora?: any | null, estacionInicio?: string | null, estacionFin?: string | null, cuantoTardoInicioFin?: string | null, tipoIdentificacion?: string | null, identificacion?: string | null, estado?: boolean | null, fehcaInicio?: string | null, fechaFin?: string | null, fecha?: string | null, createdAt?: any | null, updatedAt?: any | null, cargo?: { __typename?: 'CargoEntityResponse', data?: { __typename?: 'CargoEntity', id?: string | null, attributes?: { __typename?: 'Cargo', nombre?: string | null } | null } | null } | null } | null }> } | null };
+export type PedidosQuery = { __typename?: 'Query', pedidos?: { __typename?: 'PedidoEntityResponseCollection', meta: { __typename?: 'ResponseCollectionMeta', pagination: { __typename?: 'Pagination', total: number } }, data: Array<{ __typename?: 'PedidoEntity', id?: string | null, attributes?: { __typename?: 'Pedido', nombrePedido?: string | null, descripcion?: string | null, cliente?: string | null, hora?: any | null, estacionInicio?: string | null, estacionFin?: string | null, cuantoTardoInicioFin?: string | null, tipoIdentificacion?: string | null, identificacion?: string | null, estado?: boolean | null, fehcaInicio?: string | null, fechaFin?: string | null, fecha?: string | null, createdAt?: any | null, updatedAt?: any | null, cargo?: { __typename?: 'CargoEntityResponse', data?: { __typename?: 'CargoEntity', id?: string | null, attributes?: { __typename?: 'Cargo', nombre?: string | null } | null } | null } | null, user?: { __typename?: 'UsersPermissionsUserEntityResponse', data?: { __typename?: 'UsersPermissionsUserEntity', id?: string | null } | null } | null } | null }> } | null };
 
 export type UsersPermissionsUserQueryVariables = Exact<{
   usersPermissionsUserId?: InputMaybe<Scalars['ID']['input']>;
 }>;
 
 
-export type UsersPermissionsUserQuery = { __typename?: 'Query', usersPermissionsUser?: { __typename?: 'UsersPermissionsUserEntityResponse', data?: { __typename?: 'UsersPermissionsUserEntity', attributes?: { __typename?: 'UsersPermissionsUser', username: string, email: string, nombreCompleto?: string | null, Area?: string | null, cargo?: { __typename?: 'CargoEntityResponse', data?: { __typename?: 'CargoEntity', attributes?: { __typename?: 'Cargo', nombre?: string | null } | null } | null } | null, pedidos?: { __typename?: 'PedidoRelationResponseCollection', data: Array<{ __typename?: 'PedidoEntity', attributes?: { __typename?: 'Pedido', nombrePedido?: string | null, descripcion?: string | null, cliente?: string | null, fecha?: string | null, hora?: any | null, estacionInicio?: string | null, estacionFin?: string | null, fehcaInicio?: string | null, fechaFin?: string | null, cuantoTardoInicioFin?: string | null, estado?: boolean | null } | null }> } | null, turnos?: { __typename?: 'TurnoRelationResponseCollection', data: Array<{ __typename?: 'TurnoEntity', attributes?: { __typename?: 'Turno', fin?: any | null, inicio?: any | null, nombre?: string | null } | null }> } | null } | null } | null } | null };
+export type UsersPermissionsUserQuery = { __typename?: 'Query', usersPermissionsUser?: { __typename?: 'UsersPermissionsUserEntityResponse', data?: { __typename?: 'UsersPermissionsUserEntity', attributes?: { __typename?: 'UsersPermissionsUser', username: string, enlinea?: boolean | null, email: string, nombreCompleto?: string | null, Area?: string | null, cargo?: { __typename?: 'CargoEntityResponse', data?: { __typename?: 'CargoEntity', attributes?: { __typename?: 'Cargo', nombre?: string | null } | null } | null } | null, pedidos?: { __typename?: 'PedidoRelationResponseCollection', data: Array<{ __typename?: 'PedidoEntity', attributes?: { __typename?: 'Pedido', nombrePedido?: string | null, descripcion?: string | null, cliente?: string | null, fecha?: string | null, hora?: any | null, estacionInicio?: string | null, estacionFin?: string | null, fehcaInicio?: string | null, fechaFin?: string | null, cuantoTardoInicioFin?: string | null, estado?: boolean | null } | null }> } | null, turnos?: { __typename?: 'TurnoRelationResponseCollection', data: Array<{ __typename?: 'TurnoEntity', attributes?: { __typename?: 'Turno', fin?: any | null, inicio?: any | null, nombre?: string | null } | null }> } | null } | null } | null } | null };
 
 export type UsersPermissionsUsersQueryVariables = Exact<{
   pagination?: InputMaybe<PaginationArg>;
 }>;
 
 
-export type UsersPermissionsUsersQuery = { __typename?: 'Query', usersPermissionsUsers?: { __typename?: 'UsersPermissionsUserEntityResponseCollection', data: Array<{ __typename?: 'UsersPermissionsUserEntity', id?: string | null, attributes?: { __typename?: 'UsersPermissionsUser', username: string, email: string, provider?: string | null, confirmed?: boolean | null, blocked?: boolean | null, nombreCompleto?: string | null, Area?: string | null, createdAt?: any | null, updatedAt?: any | null, cargo?: { __typename?: 'CargoEntityResponse', data?: { __typename?: 'CargoEntity', attributes?: { __typename?: 'Cargo', nombre?: string | null } | null } | null } | null } | null }>, meta: { __typename?: 'ResponseCollectionMeta', pagination: { __typename?: 'Pagination', total: number } } } | null };
+export type UsersPermissionsUsersQuery = { __typename?: 'Query', usersPermissionsUsers?: { __typename?: 'UsersPermissionsUserEntityResponseCollection', data: Array<{ __typename?: 'UsersPermissionsUserEntity', id?: string | null, attributes?: { __typename?: 'UsersPermissionsUser', username: string, enlinea?: boolean | null, email: string, provider?: string | null, confirmed?: boolean | null, blocked?: boolean | null, nombreCompleto?: string | null, Area?: string | null, createdAt?: any | null, updatedAt?: any | null, cargo?: { __typename?: 'CargoEntityResponse', data?: { __typename?: 'CargoEntity', attributes?: { __typename?: 'Cargo', nombre?: string | null } | null } | null } | null } | null }>, meta: { __typename?: 'ResponseCollectionMeta', pagination: { __typename?: 'Pagination', total: number } } } | null };
 
 
 export const LoginDocument = gql`
@@ -2277,6 +2280,11 @@ export const PedidosDocument = gql`
         fecha
         createdAt
         updatedAt
+        user {
+          data {
+            id
+          }
+        }
       }
     }
   }
@@ -2316,6 +2324,7 @@ export const UsersPermissionsUserDocument = gql`
     data {
       attributes {
         username
+        enlinea
         email
         cargo {
           data {
@@ -2391,6 +2400,7 @@ export const UsersPermissionsUsersDocument = gql`
     data {
       attributes {
         username
+        enlinea
         email
         provider
         confirmed

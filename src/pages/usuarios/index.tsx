@@ -139,10 +139,12 @@ const UsuariosPage = () => {
       minWidth: 170,
       headerName: 'Cargo',
       renderCell: ({ row }: CellType) => {
+        const cargo = row.attributes.cargo.data ? row.attributes.cargo.data.attributes.nombre : 'Sin cargo'
+
         return (
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Typography noWrap sx={{ color: 'text.secondary', textTransform: 'capitalize' }}>
-              {row.attributes.cargo}
+              {cargo}
             </Typography>
           </Box>
         )

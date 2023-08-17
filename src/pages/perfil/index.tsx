@@ -71,6 +71,8 @@ const PerfilPage = () => {
     setActiveTab('tareas')
   }, [])
 
+  console.log('pedidos', dataUsuario.attributes?.pedidos?.data)
+
   return (
     <>
       <Grid container spacing={6}>
@@ -97,7 +99,7 @@ const PerfilPage = () => {
                         </Box>
                       }
                     />
-                    <Tab
+                    {/* <Tab
                       value='turnos'
                       label={
                         <Box sx={{ display: 'flex', alignItems: 'center', ...(!hideText && { '& svg': { mr: 2 } }) }}>
@@ -105,7 +107,7 @@ const PerfilPage = () => {
                           {!hideText && 'Turnos'}
                         </Box>
                       }
-                    />
+                    /> */}
                   </TabList>
                 </Grid>
                 <Grid item xs={12}>
