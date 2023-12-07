@@ -1,8 +1,8 @@
 import { create } from 'zustand'
 import { Socket, io } from 'socket.io-client'
+import enviroment from 'src/enviroment'
 
-//const URL = enviroment.URL;
-const URL = 'http://192.168.1.101:8080'
+const URL = enviroment.SOCKET_URL
 
 export interface NuevoRegistroArgs {
   to: string
