@@ -12,6 +12,7 @@ import { AuthValuesType, LoginParams, ErrCallbackType, UserDataType } from './ty
 
 // ** Services
 import { useAuthServices } from 'src/service/useAuthServices'
+import { useSocket } from 'src/hooks/use-socket'
 
 // ** Defaults
 const defaultProvider: AuthValuesType = {
@@ -31,6 +32,7 @@ type Props = {
 
 const AuthProvider = ({ children }: Props) => {
   // ** States
+  const { connetSocket, disconnetSocket } = useSocket()
   const [user, setUser] = useState<UserDataType | null>(defaultProvider.user)
   const [loading, setLoading] = useState<boolean>(defaultProvider.loading)
 
@@ -44,15 +46,17 @@ const AuthProvider = ({ children }: Props) => {
     const initAuth = async (): Promise<void> => {
       const storedToken = window.localStorage.getItem(authConfig.storageTokenKeyName)!
       const userToken = JSON.parse(window.localStorage.getItem('userData')!)
-      if (storedToken) {
+      if (storedToken && userToken?.id) {
         setLoading(false)
         setUser(userToken)
+        connetSocket({ userId: userToken.id })
       } else {
         localStorage.removeItem('userData')
         localStorage.removeItem('refreshToken')
         localStorage.removeItem('accessToken')
         setUser(null)
         setLoading(false)
+        disconnetSocket()
         console.log(authConfig.onTokenExpiration)
         if (authConfig.onTokenExpiration === 'logout' && !router.pathname.includes('login')) {
           router.replace('/login')

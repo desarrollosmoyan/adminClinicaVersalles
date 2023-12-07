@@ -29,6 +29,8 @@ import { usePedidosServices } from 'src/service/usePedidosServices'
 import { Grid, MenuItem, SelectChangeEvent } from '@mui/material'
 import { useEstacionesServices } from 'src/service/useEstacionesServices'
 import { useCargosServices } from 'src/service/useCargosServices'
+import { useSocket } from 'src/hooks/use-socket'
+import { Enum_Pedido_Stage, useCreatePedidoMutation } from 'src/generated/graphql'
 
 interface SidebarAddUserType {
   open: boolean
@@ -63,6 +65,7 @@ const defaultValues = {
 }
 
 const SidebarAddUser = (props: SidebarAddUserType) => {
+  const socket = useSocket(state => state.socket)
   const [status, setStatus] = useState<string>('')
   const [estacionesInicio, setEstacionesInicio] = useState('')
   const [estacionesFinal, setEstacionesFinal] = useState('')
@@ -76,7 +79,8 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
   const { open, toggle, data: dataSend, refetch, nameModal } = props
 
   // ** Llama a graphql
-  const { CreatePedido, UpdatePedido } = usePedidosServices()
+  const { UpdatePedido } = usePedidosServices()
+  const [createPedidoMutation] = useCreatePedidoMutation()
 
   const { Estaciones } = useEstacionesServices()
   const { dataEstaciones } = Estaciones()
@@ -120,24 +124,31 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
   })
   const onSubmit = async (data: UpdatePedido) => {
     if (nameModal === 'crear') {
-      const res = await CreatePedido({
-        descripcion: data.descripcion,
-        cliente: data.cliente,
-        estacionFin: estacionesFinal,
-        estacionInicio: estacionesInicio,
-        cargo: status!,
-        tipoIdentificacion: tipoIdentificacion,
-        identificacion: `${data.identificacion}`
+      const res = await createPedidoMutation({
+        variables: {
+          data: {
+            descripcion: data.descripcion,
+            cliente: data.cliente,
+            estacionFin: estacionesFinal,
+            estacionInicio: estacionesInicio,
+            cargo: status!,
+            tipoIdentificacion: tipoIdentificacion,
+            identificacion: String(data.identificacion),
+            stage: Enum_Pedido_Stage.StandBy
+          }
+        }
       })
-      if (res.res) {
+      if (res.data?.createPedido?.data?.id) {
         toggle()
         reset()
-        toast.success('Pedido creado', {
-          duration: 2000
-        })
         refetch()
+        toast.success('Pedido creado', { duration: 2000 })
+        socket?.emit('order:new-order', {
+          cargoId: status,
+          pedidoId: res.data?.createPedido?.data?.id
+        })
       } else {
-        toast.error(res.response as string, {
+        toast.error('Error al crear pedido' as string, {
           duration: 2000
         })
       }
