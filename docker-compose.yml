@@ -1,0 +1,10 @@
+version: '3'
+services:
+  strapi:
+    build: .
+    restart: unless-stopped
+    container_name: versalles-dashboard
+    volumes:
+      - ./src:/next-app/src
+    ports:
+      - '${PORT}:${PORT}'
