@@ -2,7 +2,7 @@ import { create } from 'zustand'
 import { Socket, io } from 'socket.io-client'
 import enviroment from 'src/enviroment'
 
-const URL = enviroment.SOCKET_URL
+const URL = enviroment.URL
 
 export interface NuevoRegistroArgs {
   to: string
