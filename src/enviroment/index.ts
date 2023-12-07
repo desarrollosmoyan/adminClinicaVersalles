@@ -1,5 +1,5 @@
 const URL_DEV_LOCAL = 'http://192.168.1.18:1337'
-const URL_PRD = 'http://203.161.61.90:1340'
+const URL_PRD = process.env.NEXT_PUBLIC_URL ?? ''
 
 const ENV = {
   DEV_LOCAL: { URL: URL_DEV_LOCAL },
