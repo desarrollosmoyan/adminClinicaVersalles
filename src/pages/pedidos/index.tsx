@@ -19,7 +19,14 @@ import { DataGrid, GridColDef } from '@mui/x-data-grid'
 import Icon from 'src/@core/components/icon'
 
 // ** Services
-import { CargoEntityResponse, Maybe, PedidoEntity, UsersPermissionsUserEntityResponse } from 'src/generated/graphql'
+import {
+  CargoEntityResponse,
+  Enum_Pedido_Stage,
+  Maybe,
+  PedidoEntity,
+  UsersPermissionsUserEntityResponse,
+  usePedidosQuery
+} from 'src/generated/graphql'
 import { toast } from 'react-hot-toast'
 
 import TableHeader from 'src/components/shared/TableHeader'
@@ -27,6 +34,7 @@ import AddUserDrawer from 'src/views/apps/pedidos/AddUserDrawer'
 import { usePedidosServices } from 'src/service/usePedidosServices'
 import Link from 'next/link'
 import { format } from 'date-fns'
+import { Chip, TablePagination } from '@mui/material'
 
 interface CellType {
   row: any
@@ -145,10 +153,22 @@ const PedidosPage = () => {
   const [paginationModel, setPaginationModel] = useState({ page: 1, pageSize: 10 })
 
   // ** Llama de graphql
-  const { Pedidos } = usePedidosServices()
+  /*   const { Pedidos } = usePedidosServices()
   const { dataPedidos, refetch, loadingPedidos } = Pedidos({
     pagination: { pageSize: paginationModel.pageSize, page: paginationModel.page }
   })
+ */
+
+  const pedidosQuery = usePedidosQuery({
+    fetchPolicy: 'network-only',
+    variables: {
+      sort: 'createdAt:desc',
+      pagination: paginationModel
+    }
+  })
+
+  const dataPedidos = pedidosQuery.data?.pedidos?.data ?? []
+  const total = pedidosQuery.data?.pedidos?.meta.pagination.total ?? 0
 
   // ** Columns
   const columns: GridColDef[] = [
@@ -171,51 +191,54 @@ const PedidosPage = () => {
       }
     },
     {
-      flex: 0.15,
-      field: 'descripcion',
-      minWidth: 170,
-      headerName: 'Descripcion',
+      flex: 0.25,
+      minWidth: 280,
+      field: 'stage',
+      headerName: 'Estado',
       renderCell: ({ row }: CellType) => {
-        return (
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Typography noWrap sx={{ color: 'text.secondary', textTransform: 'capitalize' }}>
-              {row.attributes.descripcion}
-            </Typography>
-          </Box>
-        )
-      }
-    },
-    {
-      flex: 0.15,
-      field: 'estacionInicio',
-      minWidth: 170,
-      headerName: 'Estacion Inicio',
-      renderCell: ({ row }: CellType) => {
-        return (
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Typography noWrap sx={{ color: 'text.secondary', textTransform: 'capitalize' }}>
-              {row.attributes.estacionInicio}
-            </Typography>
-          </Box>
-        )
-      }
-    },
-    {
-      flex: 0.15,
-      field: 'estacionFin',
-      minWidth: 170,
-      headerName: 'Estacion Fin',
-      renderCell: ({ row }: CellType) => {
-        return (
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Typography noWrap sx={{ color: 'text.secondary', textTransform: 'capitalize' }}>
-              {row.attributes.estacionFin}
-            </Typography>
-          </Box>
-        )
-      }
-    },
+        const stage = row.attributes.stage as Enum_Pedido_Stage
 
+        const stages = {
+          [Enum_Pedido_Stage.StandBy]: 'Solicitado',
+          [Enum_Pedido_Stage.InitialPoint]: 'Inicializado',
+          [Enum_Pedido_Stage.FinalPoint]: 'Finalizado'
+        }
+
+        const colors = {
+          [Enum_Pedido_Stage.StandBy]: 'warning',
+          [Enum_Pedido_Stage.InitialPoint]: 'info',
+          [Enum_Pedido_Stage.FinalPoint]: 'success'
+        } as const
+
+        return <Chip color={colors?.[stage]} label={stages?.[stage]} />
+      }
+    },
+    {
+      flex: 0.15,
+      minWidth: 120,
+      headerName: 'Fecha de inicio',
+      field: 'fehcaInicio',
+      renderCell: ({ row }: CellType) => {
+        return (
+          <Typography noWrap sx={{ fontWeight: 500, color: 'text.secondary', textTransform: 'capitalize' }}>
+            {format(new Date(row.attributes.createdAt), 'yyyy-MM-dd hh:mm')}
+          </Typography>
+        )
+      }
+    },
+    {
+      flex: 0.15,
+      minWidth: 120,
+      headerName: 'Fecha de fin',
+      field: 'fechaFin',
+      renderCell: ({ row }: CellType) => {
+        return (
+          <Typography noWrap sx={{ fontWeight: 500, color: 'text.secondary', textTransform: 'capitalize' }}>
+            {format(new Date(row.attributes.createdAt), 'yyyy-MM-dd hh:mm')}
+          </Typography>
+        )
+      }
+    },
     {
       flex: 0.15,
       minWidth: 120,
@@ -224,7 +247,7 @@ const PedidosPage = () => {
       renderCell: ({ row }: CellType) => {
         return (
           <Typography noWrap sx={{ fontWeight: 500, color: 'text.secondary', textTransform: 'capitalize' }}>
-            {format(new Date(row.attributes.createdAt), 'yyyy-MM-dd')}
+            {format(new Date(row.attributes.createdAt), 'yyyy-MM-dd hh:mm')}
           </Typography>
         )
       }
@@ -241,7 +264,7 @@ const PedidosPage = () => {
           data={row}
           setIsModal={setIsModal}
           setDataPedido={setDataPedido}
-          refetch={refetch}
+          refetch={pedidosQuery.refetch}
           setNameModal={setNameModal}
         />
       )
@@ -274,13 +297,18 @@ const PedidosPage = () => {
           identificacion: pedido?.attributes?.identificacion
         }
       }),
-    [loadingPedidos]
+    [pedidosQuery.loading]
   )
 
   return (
     <Grid container spacing={6.5}>
       <Grid item xs={12}>
-        <Card>
+        <Card
+          sx={{
+            display: 'flex',
+            flexDirection: 'column'
+          }}
+        >
           <Divider sx={{ m: '0 !important' }} />
           <TableHeader
             value={value}
@@ -295,18 +323,43 @@ const PedidosPage = () => {
             rowHeight={62}
             rows={dataPedidos}
             columns={columns}
+            hideFooterPagination
             disableRowSelectionOnClick
-            pageSizeOptions={[10, 25, 50]}
-            paginationModel={paginationModel}
-            onPaginationModelChange={setPaginationModel}
             localeText={{ noRowsLabel: 'No hay información' }}
-            loading={loadingPedidos}
+            loading={pedidosQuery.loading}
             componentsProps={{
               pagination: {
                 labelRowsPerPage: 'Filas por página'
               }
             }}
           />
+          <Box
+            sx={{
+              marginLeft: 'auto'
+            }}
+          >
+            <TablePagination
+              rowsPerPageOptions={[5, 10, 50, 100]}
+              colSpan={4}
+              count={total}
+              rowsPerPage={paginationModel.pageSize}
+              page={paginationModel.page - 1}
+              SelectProps={{
+                inputProps: {
+                  'aria-label': 'rows per page'
+                },
+                native: true
+              }}
+              onRowsPerPageChange={event => {
+                console.log({ size: event.target.value })
+                setPaginationModel(prev => ({ ...prev, pageSize: parseInt(event.target.value, 10) }))
+              }}
+              onPageChange={(_, newPage) => {
+                console.log({ newPage })
+                setPaginationModel(prev => ({ ...prev, page: newPage + 1 }))
+              }}
+            />
+          </Box>
         </Card>
       </Grid>
 
@@ -314,7 +367,7 @@ const PedidosPage = () => {
         open={isModal}
         toggle={toggleAddUserDrawer}
         data={dataPedido}
-        refetch={refetch}
+        refetch={pedidosQuery.refetch}
         nameModal={nameModal}
       />
     </Grid>
