@@ -9,6 +9,7 @@ import CustomTextField from 'src/@core/components/mui/text-field'
 import Icon from 'src/@core/components/icon'
 
 import { utils, writeFile } from 'xlsx'
+import React from 'react'
 
 interface TableHeaderProps {
   value: string
@@ -17,6 +18,7 @@ interface TableHeaderProps {
   name: string
   nameSearch: string
   data?: any
+  filters?: React.ReactNode
 }
 
 const TableHeader = (props: TableHeaderProps) => {
@@ -56,6 +58,9 @@ const TableHeader = (props: TableHeaderProps) => {
       >
         Exportar
       </Button>
+
+      {props.filters}
+
       <Box sx={{ rowGap: 2, display: 'flex', flexWrap: 'wrap', alignItems: 'center' }}>
         <CustomTextField
           value={value}

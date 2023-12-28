@@ -27,6 +27,17 @@ query Pedido($pedidoId: ID) {
         updatedAt
         tipoIdentificacion
         identificacion
+
+        creadoPor {
+          data {
+            id
+            attributes {
+              email
+              username
+              nombreCompleto
+            }
+          }
+        }
       }
     }
   }

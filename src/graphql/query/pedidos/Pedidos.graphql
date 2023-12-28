@@ -37,6 +37,17 @@ query Pedidos($filters: PedidoFiltersInput, $pagination: PaginationArg, $sort: [
             id
           }
         }
+
+        creadoPor {
+          data {
+            id
+            attributes {
+              email
+              username
+              nombreCompleto
+            }
+          }
+        }
       }
     }
   }

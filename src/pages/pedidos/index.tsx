@@ -34,7 +34,7 @@ import AddUserDrawer from 'src/views/apps/pedidos/AddUserDrawer'
 import { usePedidosServices } from 'src/service/usePedidosServices'
 import Link from 'next/link'
 import { format } from 'date-fns'
-import { Chip, TablePagination } from '@mui/material'
+import { Chip, FormControl, InputLabel, Select, TablePagination } from '@mui/material'
 
 interface CellType {
   row: any
@@ -54,6 +54,18 @@ export interface UpdatePedido {
   user?: Maybe<UsersPermissionsUserEntityResponse> | undefined
   cargo?: CargoEntityResponse | undefined | null
 }
+
+const stages = {
+  [Enum_Pedido_Stage.StandBy]: 'Solicitado',
+  [Enum_Pedido_Stage.InitialPoint]: 'Inicializado',
+  [Enum_Pedido_Stage.FinalPoint]: 'Finalizado'
+}
+
+const colors = {
+  [Enum_Pedido_Stage.StandBy]: 'warning',
+  [Enum_Pedido_Stage.InitialPoint]: 'info',
+  [Enum_Pedido_Stage.FinalPoint]: 'success'
+} as const
 
 const RowOptions = ({
   data,
@@ -152,18 +164,16 @@ const PedidosPage = () => {
   const [dataPedido, setDataPedido] = useState<UpdatePedido | undefined>()
   const [paginationModel, setPaginationModel] = useState({ page: 1, pageSize: 10 })
 
-  // ** Llama de graphql
-  /*   const { Pedidos } = usePedidosServices()
-  const { dataPedidos, refetch, loadingPedidos } = Pedidos({
-    pagination: { pageSize: paginationModel.pageSize, page: paginationModel.page }
-  })
- */
+  const [selectedStage, setSelectedStage] = useState<string | null>(null)
 
   const pedidosQuery = usePedidosQuery({
     fetchPolicy: 'network-only',
     variables: {
       sort: 'createdAt:desc',
-      pagination: paginationModel
+      pagination: paginationModel,
+      filters: {
+        ...(selectedStage && { stage: { eq: selectedStage } })
+      }
     }
   })
 
@@ -193,22 +203,29 @@ const PedidosPage = () => {
     {
       flex: 0.25,
       minWidth: 280,
+      field: 'creadoPor',
+      headerName: 'Creado por',
+      renderCell: ({ row }: CellType) => {
+        console.log(row?.attributes?.creadoPor?.data?.attributes?.nombreCompleto)
+
+        return (
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            {/* {renderClient(row)} */}
+            <Box sx={{ display: 'flex', alignItems: 'flex-start', flexDirection: 'column' }}>
+              <Typography noWrap sx={{ color: 'text.secondary', textTransform: 'capitalize' }}>
+                {row?.attributes?.creadoPor?.data?.attributes?.nombreCompleto}
+              </Typography>
+            </Box>
+          </Box>
+        )
+      }
+    },
+    {
+      minWidth: 180,
       field: 'stage',
       headerName: 'Estado',
       renderCell: ({ row }: CellType) => {
         const stage = row.attributes.stage as Enum_Pedido_Stage
-
-        const stages = {
-          [Enum_Pedido_Stage.StandBy]: 'Solicitado',
-          [Enum_Pedido_Stage.InitialPoint]: 'Inicializado',
-          [Enum_Pedido_Stage.FinalPoint]: 'Finalizado'
-        }
-
-        const colors = {
-          [Enum_Pedido_Stage.StandBy]: 'warning',
-          [Enum_Pedido_Stage.InitialPoint]: 'info',
-          [Enum_Pedido_Stage.FinalPoint]: 'success'
-        } as const
 
         return <Chip color={colors?.[stage]} label={stages?.[stage]} />
       }
@@ -216,12 +233,12 @@ const PedidosPage = () => {
     {
       flex: 0.15,
       minWidth: 120,
-      headerName: 'Fecha de inicio',
       field: 'fehcaInicio',
+      headerName: 'Hora de inicio',
       renderCell: ({ row }: CellType) => {
         return (
           <Typography noWrap sx={{ fontWeight: 500, color: 'text.secondary', textTransform: 'capitalize' }}>
-            {format(new Date(row.attributes.createdAt), 'yyyy-MM-dd hh:mm')}
+            {format(new Date(row.attributes.createdAt), 'hh:mm a')}
           </Typography>
         )
       }
@@ -229,12 +246,12 @@ const PedidosPage = () => {
     {
       flex: 0.15,
       minWidth: 120,
-      headerName: 'Fecha de fin',
       field: 'fechaFin',
+      headerName: 'Hora de fin',
       renderCell: ({ row }: CellType) => {
         return (
           <Typography noWrap sx={{ fontWeight: 500, color: 'text.secondary', textTransform: 'capitalize' }}>
-            {format(new Date(row.attributes.createdAt), 'yyyy-MM-dd hh:mm')}
+            {format(new Date(row.attributes.createdAt), 'hh:mm a')}
           </Typography>
         )
       }
@@ -242,12 +259,12 @@ const PedidosPage = () => {
     {
       flex: 0.15,
       minWidth: 120,
-      headerName: 'Fecha de creacion',
       field: 'createdAt',
+      headerName: 'Hora de creacion',
       renderCell: ({ row }: CellType) => {
         return (
           <Typography noWrap sx={{ fontWeight: 500, color: 'text.secondary', textTransform: 'capitalize' }}>
-            {format(new Date(row.attributes.createdAt), 'yyyy-MM-dd hh:mm')}
+            {format(new Date(row.attributes.createdAt), 'hh:mm a')}
           </Typography>
         )
       }
@@ -317,6 +334,28 @@ const PedidosPage = () => {
             name='Agregar Pedido'
             nameSearch='Buscar pedidos'
             data={dataExport}
+            filters={
+              <Box>
+                <FormControl sx={{ marginRight: 12, width: 200 }}>
+                  <InputLabel id='form-stage'>Estado</InputLabel>
+                  <Select
+                    value={selectedStage ?? ''}
+                    label='Estado'
+                    labelId='form-stage'
+                    onChange={e =>
+                      setSelectedStage(e.target.value.trim().length === 0 ? null : (e.target.value as string))
+                    }
+                  >
+                    <MenuItem value=''>Todos</MenuItem>
+                    {Object.entries(stages).map(([key, value]) => (
+                      <MenuItem key={key} value={key}>
+                        {value}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Box>
+            }
           />
           <DataGrid
             autoHeight
