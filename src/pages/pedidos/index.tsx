@@ -195,7 +195,7 @@ const PedidosPage = () => {
             {/* {renderClient(row)} */}
             <Box sx={{ display: 'flex', alignItems: 'flex-start', flexDirection: 'column' }}>
               <Typography noWrap sx={{ color: 'text.secondary', textTransform: 'capitalize' }}>
-                {row.attributes.cliente}
+                {row?.attributes?.cliente}
               </Typography>
             </Box>
           </Box>
@@ -213,7 +213,7 @@ const PedidosPage = () => {
             {/* {renderClient(row)} */}
             <Box sx={{ display: 'flex', alignItems: 'flex-start', flexDirection: 'column' }}>
               <Typography noWrap sx={{ color: 'text.secondary', textTransform: 'capitalize' }}>
-                {row.attributes.identificacion}
+                {row?.attributes?.identificacion}
               </Typography>
             </Box>
           </Box>
@@ -231,7 +231,7 @@ const PedidosPage = () => {
             {/* {renderClient(row)} */}
             <Box sx={{ display: 'flex', alignItems: 'flex-start', flexDirection: 'column' }}>
               <Typography noWrap sx={{ color: 'text.secondary', textTransform: 'capitalize' }}>
-                {row.attributes.estacionInicio}
+                {row?.attributes?.estacionInicio}
               </Typography>
             </Box>
           </Box>
@@ -249,7 +249,7 @@ const PedidosPage = () => {
             {/* {renderClient(row)} */}
             <Box sx={{ display: 'flex', alignItems: 'flex-start', flexDirection: 'column' }}>
               <Typography noWrap sx={{ color: 'text.secondary', textTransform: 'capitalize' }}>
-                {row.attributes.estacionFin}
+                {row?.attributes?.estacionFin}
               </Typography>
             </Box>
           </Box>
@@ -267,7 +267,7 @@ const PedidosPage = () => {
             {/* {renderClient(row)} */}
             <Box sx={{ display: 'flex', alignItems: 'flex-start', flexDirection: 'column' }}>
               <Typography noWrap sx={{ color: 'text.secondary', textTransform: 'capitalize' }}>
-                {row.attributes.user.data.attributes.nombreCompleto}
+                {row?.attributes?.user?.data?.attributes?.nombreCompleto}
               </Typography>
             </Box>
           </Box>
@@ -285,7 +285,7 @@ const PedidosPage = () => {
             {/* {renderClient(row)} */}
             <Box sx={{ display: 'flex', alignItems: 'flex-start', flexDirection: 'column' }}>
               <Typography noWrap sx={{ color: 'text.secondary', textTransform: 'capitalize' }}>
-                {row.attributes.cargo.data.attributes.nombre}
+                {row?.attributes?.cargo?.data?.attributes?.nombre}
               </Typography>
             </Box>
           </Box>
@@ -303,7 +303,7 @@ const PedidosPage = () => {
             {/* {renderClient(row)} */}
             <Box sx={{ display: 'flex', alignItems: 'flex-start', flexDirection: 'column' }}>
               <Typography noWrap sx={{ color: 'text.secondary', textTransform: 'capitalize' }}>
-                {formatDistance(new Date(row.attributes.fehcaInicio), new Date(row.attributes.fechaFin))}
+                {formatDistance(new Date(row?.attributes?.fehcaInicio), new Date(row?.attributes?.fechaFin))}
               </Typography>
             </Box>
           </Box>
@@ -336,7 +336,7 @@ const PedidosPage = () => {
       field: 'stage',
       headerName: 'Estado',
       renderCell: ({ row }: CellType) => {
-        const stage = row.attributes.stage as Enum_Pedido_Stage
+        const stage = row?.attributes?.stage as Enum_Pedido_Stage
 
         return <Chip color={colors?.[stage]} label={stages?.[stage]} />
       }
@@ -375,7 +375,7 @@ const PedidosPage = () => {
       renderCell: ({ row }: CellType) => {
         return (
           <Typography noWrap sx={{ fontWeight: 500, color: 'text.secondary', textTransform: 'capitalize' }}>
-            {format(new Date(row.attributes.createdAt), 'hh:mm a')}
+            {format(new Date(row?.attributes?.createdAt), 'hh:mm a')}
           </Typography>
         )
       }
