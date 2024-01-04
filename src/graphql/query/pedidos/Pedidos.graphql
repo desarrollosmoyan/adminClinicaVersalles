@@ -35,6 +35,11 @@ query Pedidos($filters: PedidoFiltersInput, $pagination: PaginationArg, $sort: [
         user {
           data {
             id
+            attributes {
+              email
+              username
+              nombreCompleto
+            }
           }
         }
 

@@ -62,6 +62,10 @@ import '../../styles/globals.css'
 // APOLLO CLIENT
 import { ApolloProvider } from '@apollo/client'
 import client from 'src/apollo'
+import { es } from 'date-fns/locale'
+import { setDefaultOptions } from 'date-fns'
+
+setDefaultOptions({ locale: es })
 
 // ** Extend App Props with Emotion
 type ExtendedAppProps = AppProps & {

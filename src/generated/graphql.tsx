@@ -123,6 +123,7 @@ export type DateTimeFilterInput = {
 export enum Enum_Pedido_Stage {
   FinalPoint = 'FINAL_POINT',
   InitialPoint = 'INITIAL_POINT',
+  Read = 'READ',
   StandBy = 'STAND_BY'
 }
 
@@ -662,6 +663,7 @@ export type Pedido = {
   identificacion?: Maybe<Scalars['String']['output']>;
   nombrePedido?: Maybe<Scalars['String']['output']>;
   observacione?: Maybe<ObservacioneEntityResponse>;
+  readDate?: Maybe<Scalars['String']['output']>;
   stage?: Maybe<Enum_Pedido_Stage>;
   tipoIdentificacion?: Maybe<Scalars['String']['output']>;
   updatedAt?: Maybe<Scalars['DateTime']['output']>;
@@ -707,6 +709,7 @@ export type PedidoFiltersInput = {
   not?: InputMaybe<PedidoFiltersInput>;
   observacione?: InputMaybe<ObservacioneFiltersInput>;
   or?: InputMaybe<Array<InputMaybe<PedidoFiltersInput>>>;
+  readDate?: InputMaybe<StringFilterInput>;
   stage?: InputMaybe<StringFilterInput>;
   tipoIdentificacion?: InputMaybe<StringFilterInput>;
   updatedAt?: InputMaybe<DateTimeFilterInput>;
@@ -730,6 +733,7 @@ export type PedidoInput = {
   identificacion?: InputMaybe<Scalars['String']['input']>;
   nombrePedido?: InputMaybe<Scalars['String']['input']>;
   observacione?: InputMaybe<Scalars['ID']['input']>;
+  readDate?: InputMaybe<Scalars['String']['input']>;
   stage?: InputMaybe<Enum_Pedido_Stage>;
   tipoIdentificacion?: InputMaybe<Scalars['String']['input']>;
   user?: InputMaybe<Scalars['ID']['input']>;
@@ -1593,7 +1597,7 @@ export type PedidosQueryVariables = Exact<{
 }>;
 
 
-export type PedidosQuery = { __typename?: 'Query', pedidos?: { __typename?: 'PedidoEntityResponseCollection', meta: { __typename?: 'ResponseCollectionMeta', pagination: { __typename?: 'Pagination', total: number } }, data: Array<{ __typename?: 'PedidoEntity', id?: string | null, attributes?: { __typename?: 'Pedido', nombrePedido?: string | null, descripcion?: string | null, cliente?: string | null, hora?: any | null, estacionInicio?: string | null, estacionFin?: string | null, cuantoTardoInicioFin?: string | null, tipoIdentificacion?: string | null, identificacion?: string | null, estado?: boolean | null, fehcaInicio?: string | null, fechaFin?: string | null, fecha?: string | null, stage?: Enum_Pedido_Stage | null, createdAt?: any | null, updatedAt?: any | null, cargo?: { __typename?: 'CargoEntityResponse', data?: { __typename?: 'CargoEntity', id?: string | null, attributes?: { __typename?: 'Cargo', nombre?: string | null } | null } | null } | null, user?: { __typename?: 'UsersPermissionsUserEntityResponse', data?: { __typename?: 'UsersPermissionsUserEntity', id?: string | null } | null } | null, creadoPor?: { __typename?: 'UsersPermissionsUserEntityResponse', data?: { __typename?: 'UsersPermissionsUserEntity', id?: string | null, attributes?: { __typename?: 'UsersPermissionsUser', email: string, username: string, nombreCompleto?: string | null } | null } | null } | null } | null }> } | null };
+export type PedidosQuery = { __typename?: 'Query', pedidos?: { __typename?: 'PedidoEntityResponseCollection', meta: { __typename?: 'ResponseCollectionMeta', pagination: { __typename?: 'Pagination', total: number } }, data: Array<{ __typename?: 'PedidoEntity', id?: string | null, attributes?: { __typename?: 'Pedido', nombrePedido?: string | null, descripcion?: string | null, cliente?: string | null, hora?: any | null, estacionInicio?: string | null, estacionFin?: string | null, cuantoTardoInicioFin?: string | null, tipoIdentificacion?: string | null, identificacion?: string | null, estado?: boolean | null, fehcaInicio?: string | null, fechaFin?: string | null, fecha?: string | null, stage?: Enum_Pedido_Stage | null, createdAt?: any | null, updatedAt?: any | null, cargo?: { __typename?: 'CargoEntityResponse', data?: { __typename?: 'CargoEntity', id?: string | null, attributes?: { __typename?: 'Cargo', nombre?: string | null } | null } | null } | null, user?: { __typename?: 'UsersPermissionsUserEntityResponse', data?: { __typename?: 'UsersPermissionsUserEntity', id?: string | null, attributes?: { __typename?: 'UsersPermissionsUser', email: string, username: string, nombreCompleto?: string | null } | null } | null } | null, creadoPor?: { __typename?: 'UsersPermissionsUserEntityResponse', data?: { __typename?: 'UsersPermissionsUserEntity', id?: string | null, attributes?: { __typename?: 'UsersPermissionsUser', email: string, username: string, nombreCompleto?: string | null } | null } | null } | null } | null }> } | null };
 
 export type UsersPermissionsUserQueryVariables = Exact<{
   usersPermissionsUserId?: InputMaybe<Scalars['ID']['input']>;
@@ -2325,6 +2329,11 @@ export const PedidosDocument = gql`
         user {
           data {
             id
+            attributes {
+              email
+              username
+              nombreCompleto
+            }
           }
         }
         creadoPor {

@@ -33,7 +33,7 @@ import TableHeader from 'src/components/shared/TableHeader'
 import AddUserDrawer from 'src/views/apps/pedidos/AddUserDrawer'
 import { usePedidosServices } from 'src/service/usePedidosServices'
 import Link from 'next/link'
-import { format } from 'date-fns'
+import { format, formatDistance } from 'date-fns'
 import { Chip, FormControl, InputLabel, Select, TablePagination } from '@mui/material'
 
 interface CellType {
@@ -58,11 +58,13 @@ export interface UpdatePedido {
 const stages = {
   [Enum_Pedido_Stage.StandBy]: 'Solicitado',
   [Enum_Pedido_Stage.InitialPoint]: 'Inicializado',
-  [Enum_Pedido_Stage.FinalPoint]: 'Finalizado'
+  [Enum_Pedido_Stage.FinalPoint]: 'Finalizado',
+  [Enum_Pedido_Stage.Read]: 'Enterado'
 }
 
 const colors = {
   [Enum_Pedido_Stage.StandBy]: 'warning',
+  [Enum_Pedido_Stage.Read]: 'info',
   [Enum_Pedido_Stage.InitialPoint]: 'info',
   [Enum_Pedido_Stage.FinalPoint]: 'success'
 } as const
@@ -203,6 +205,114 @@ const PedidosPage = () => {
     {
       flex: 0.25,
       minWidth: 280,
+      field: 'identificacion',
+      headerName: 'Identificacion',
+      renderCell: ({ row }: CellType) => {
+        return (
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            {/* {renderClient(row)} */}
+            <Box sx={{ display: 'flex', alignItems: 'flex-start', flexDirection: 'column' }}>
+              <Typography noWrap sx={{ color: 'text.secondary', textTransform: 'capitalize' }}>
+                {row.attributes.identificacion}
+              </Typography>
+            </Box>
+          </Box>
+        )
+      }
+    },
+    {
+      flex: 0.25,
+      minWidth: 280,
+      field: 'estacionInicio',
+      headerName: 'Estacion inicial',
+      renderCell: ({ row }: CellType) => {
+        return (
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            {/* {renderClient(row)} */}
+            <Box sx={{ display: 'flex', alignItems: 'flex-start', flexDirection: 'column' }}>
+              <Typography noWrap sx={{ color: 'text.secondary', textTransform: 'capitalize' }}>
+                {row.attributes.estacionInicio}
+              </Typography>
+            </Box>
+          </Box>
+        )
+      }
+    },
+    {
+      flex: 0.25,
+      minWidth: 280,
+      field: 'estacionFin',
+      headerName: 'Estacion final',
+      renderCell: ({ row }: CellType) => {
+        return (
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            {/* {renderClient(row)} */}
+            <Box sx={{ display: 'flex', alignItems: 'flex-start', flexDirection: 'column' }}>
+              <Typography noWrap sx={{ color: 'text.secondary', textTransform: 'capitalize' }}>
+                {row.attributes.estacionFin}
+              </Typography>
+            </Box>
+          </Box>
+        )
+      }
+    },
+    {
+      flex: 0.25,
+      minWidth: 280,
+      field: 'user.data.id',
+      headerName: 'ASIGNADO A',
+      renderCell: ({ row }: CellType) => {
+        return (
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            {/* {renderClient(row)} */}
+            <Box sx={{ display: 'flex', alignItems: 'flex-start', flexDirection: 'column' }}>
+              <Typography noWrap sx={{ color: 'text.secondary', textTransform: 'capitalize' }}>
+                {row.attributes.user.data.attributes.nombreCompleto}
+              </Typography>
+            </Box>
+          </Box>
+        )
+      }
+    },
+    {
+      flex: 0.25,
+      minWidth: 280,
+      field: 'cargo.data.id',
+      headerName: 'CARGO',
+      renderCell: ({ row }: CellType) => {
+        return (
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            {/* {renderClient(row)} */}
+            <Box sx={{ display: 'flex', alignItems: 'flex-start', flexDirection: 'column' }}>
+              <Typography noWrap sx={{ color: 'text.secondary', textTransform: 'capitalize' }}>
+                {row.attributes.cargo.data.attributes.nombre}
+              </Typography>
+            </Box>
+          </Box>
+        )
+      }
+    },
+    {
+      flex: 0.25,
+      minWidth: 280,
+      field: 'tiempo',
+      headerName: 'tiempo',
+      renderCell: ({ row }: CellType) => {
+        return (
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            {/* {renderClient(row)} */}
+            <Box sx={{ display: 'flex', alignItems: 'flex-start', flexDirection: 'column' }}>
+              <Typography noWrap sx={{ color: 'text.secondary', textTransform: 'capitalize' }}>
+                {formatDistance(new Date(row.attributes.fehcaInicio), new Date(row.attributes.fechaFin))}
+              </Typography>
+            </Box>
+          </Box>
+        )
+      }
+    },
+    {
+      flex: 0.25,
+      minWidth: 280,
       field: 'creadoPor',
       headerName: 'Creado por',
       renderCell: ({ row }: CellType) => {
@@ -221,6 +331,7 @@ const PedidosPage = () => {
       }
     },
     {
+      flex: 0.25,
       minWidth: 180,
       field: 'stage',
       headerName: 'Estado',
@@ -231,34 +342,34 @@ const PedidosPage = () => {
       }
     },
     {
-      flex: 0.15,
-      minWidth: 120,
+      flex: 0.25,
+      minWidth: 180,
       field: 'fehcaInicio',
       headerName: 'Hora de inicio',
       renderCell: ({ row }: CellType) => {
         return (
           <Typography noWrap sx={{ fontWeight: 500, color: 'text.secondary', textTransform: 'capitalize' }}>
-            {format(new Date(row.attributes.createdAt), 'hh:mm a')}
+            {row?.attributes?.fehcaInicio ? format(new Date(row?.attributes?.fehcaInicio), 'hh:mm a') : '_'}
           </Typography>
         )
       }
     },
     {
-      flex: 0.15,
-      minWidth: 120,
+      flex: 0.25,
+      minWidth: 180,
       field: 'fechaFin',
       headerName: 'Hora de fin',
       renderCell: ({ row }: CellType) => {
         return (
           <Typography noWrap sx={{ fontWeight: 500, color: 'text.secondary', textTransform: 'capitalize' }}>
-            {format(new Date(row.attributes.createdAt), 'hh:mm a')}
+            {row?.attributes?.fechaFin ? format(new Date(row.attributes.fechaFin), 'hh:mm a') : '_'}
           </Typography>
         )
       }
     },
     {
-      flex: 0.15,
-      minWidth: 120,
+      flex: 0.25,
+      minWidth: 180,
       field: 'createdAt',
       headerName: 'Hora de creacion',
       renderCell: ({ row }: CellType) => {
@@ -272,7 +383,7 @@ const PedidosPage = () => {
 
     {
       flex: 0.1,
-      minWidth: 100,
+      minWidth: 150,
       sortable: false,
       field: 'actions',
       headerName: 'Accciones',
